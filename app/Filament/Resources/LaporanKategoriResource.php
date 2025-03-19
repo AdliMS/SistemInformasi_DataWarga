@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Panel;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Civilian;
