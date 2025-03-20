@@ -2,13 +2,14 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Panel;
 use Closure;
 use Filament\Forms;
+use Filament\Panel;
 use Filament\Tables;
 use App\Models\Civilian;
 use Filament\Forms\Form;
 use App\Models\DataWarga;
+use App\Models\Liability;
 use Filament\Tables\Table;
 use App\Models\CivilianJob;
 use Illuminate\Support\Carbon;
@@ -109,7 +110,15 @@ class DataWargaResource extends Resource
                         Select::make('last_education')
                             ->required()
                             ->label('Pendidikan terakhir')
+                            // ->relationship('liabilities', 'last_education')
+                            // ->createOptionForm([
+                            //     TextInput::make('last_education')
+                            // ])
                             ->options([
+                                "Belum menempuh pendidikan" => "Belum menempuh pendidikan",
+                                "TK" => "TK",
+                                "SD sederajat" => "SD sederajat",
+                                "SMP sederajat" => "SMA sederajat",
                                 "SMA sederajat" => "SMA sederajat",
                                 "D3" => "D3",
                                 "D4/S1" => "D4/S1",

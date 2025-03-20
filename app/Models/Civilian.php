@@ -68,4 +68,8 @@ class Civilian extends Model
     {
         return $this->hasMany(Liability::class);
     }
+
+    public function liability(){
+        return $this->belongsTo(Liability::class);
+    }
 }

@@ -40,29 +40,29 @@ class DataTanggunganResource extends Resource
         return $form
             ->schema([
                 TextInput::make('full_name')
-                            ->required()
-                            ->label('Nama tanggungan'),
-                            DatePicker::make('born_date')
-                            ->required()
-                            ->label('Tanggal lahir'),
-                        Select::make('gender')
-                            ->required()
-                            ->label('Jenis kelamin')
-                            ->options([
-                                "Pria"=>"Pria",
-                                "Wanita"=>"Wanita"
-                            ]),
-                        Select::make('last_education')
-                            ->required()
-                            ->label('Pendidikan terakhir')
-                            ->options([
-                                "SMA sederajat"=>"SMA sederajat",
-                                "D3"=>"D3",
-                                "D4/S1"=>"D4/S1",
-                                "S2"=>"S2",
-                                "S3"=>"S3",
+                    ->required()
+                    ->label('Nama tanggungan'),
+                DatePicker::make('born_date')
+                    ->required()
+                    ->label('Tanggal lahir'),
+                Select::make('gender')
+                    ->required()
+                    ->label('Jenis kelamin')
+                    ->options([
+                        "Pria" => "Pria",
+                        "Wanita" => "Wanita"
+                    ]),
+                Select::make('last_education')
+                    ->required()
+                    ->label('Pendidikan terakhir')
+                    ->options([
+                        "SMA sederajat" => "SMA sederajat",
+                        "D3" => "D3",
+                        "D4/S1" => "D4/S1",
+                        "S2" => "S2",
+                        "S3" => "S3",
 
-                            ])
+                    ])
             ]);
     }
 
