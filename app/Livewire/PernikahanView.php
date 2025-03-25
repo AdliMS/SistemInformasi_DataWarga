@@ -11,31 +11,52 @@ class PernikahanView extends Component
 
     use WithPagination;
 
-    public $statusPernikahan = ''; // Menyimpan nilai sementara dari select box
-    public $appliedFilter = '';    // Nilai filter yang aktif
+    public $statusPernikahan = '';      // Menyimpan filter status pernikahan sementara
+    public $selectedName = '';          // Menyimpan filter nama sementara
+    public $appliedStatusFilter = '';   // Status pernikahan yang aktif
+    public $appliedNameFilter = '';     // Nama yang aktif
+    public $nameOptions = [];           // Daftar nama untuk selectbox
 
-    // Method untuk menerapkan filter
+    // Update opsi nama saat status pernikahan berubah
+    public function loadNameOptions()
+    {
+        $this->nameOptions = Civilian::query()
+            ->when($this->statusPernikahan === 'sudah_menikah', fn($q) => $q->where('married_status', true))
+            ->when($this->statusPernikahan === 'belum_menikah', fn($q) => $q->where('married_status', false))
+            ->pluck('full_name', 'id')
+            ->toArray();
+
+        $this->selectedName = '';
+    }
+
+    // Terapkan filter saat tombol diklik
     public function applyFilter()
     {
-        $this->appliedFilter = $this->statusPernikahan;
-        $this->resetPage(); // Reset pagination jika digunakan
+        $this->appliedStatusFilter = $this->statusPernikahan;
+        $this->appliedNameFilter = $this->selectedName;
     }
 
     public function render()
     {
         $query = Civilian::query();
 
-        // Filter berdasarkan nilai yang sudah diapply ($appliedFilter)
-        if ($this->appliedFilter === 'sudah_menikah') {
+        // Filter berdasarkan status pernikahan
+        if ($this->appliedStatusFilter === 'sudah_menikah') {
             $query->where('married_status', true);
-        } elseif ($this->appliedFilter === 'belum_menikah') {
+        } elseif ($this->appliedStatusFilter === 'belum_menikah') {
             $query->where('married_status', false);
         }
 
-        $civilians = $query->get(); // Ganti dengan paginate() jika perlu
+        // Filter berdasarkan nama (jika dipilih)
+        if ($this->appliedNameFilter) {
+            $query->where('id', $this->appliedNameFilter); // Filter by ID lebih akurat
+        }
+
+        $civilians = $query->get();
 
         return view('livewire.pernikahan-view', [
             'civilians' => $civilians,
+            'nameOptions' => $this->nameOptions,
         ]);
     }
 }

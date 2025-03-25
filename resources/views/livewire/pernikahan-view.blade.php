@@ -44,10 +44,26 @@
 
     <!-- selectbox untuk filter status pernikahan -->
     <div class="flex h-20 p-2 gap-2 items-center">
-        <select wire:model.defer="statusPernikahan"  class="js-example-basic-single">
-            <option value="" default>Semua</option>
-            <option value="belum_menikah">Belum menikah</option>
-            <option value="sudah_menikah">Sudah menikah</option>
+        <select 
+            wire:model.defer="statusPernikahan" 
+            wire:change="loadNameOptions"
+            class="js-example-basic-single w-48 border-gray-300 rounded-lg">
+                <option value="" default>Semua</option>
+                <option value="belum_menikah">Belum menikah</option>
+                <option value="sudah_menikah">Sudah menikah</option>
+        </select>
+
+        <!-- selectbox untuk filter nama warga (civilian) -->
+        <select 
+            wire:model.defer="selectedName" 
+            wire:model.debounce.500ms="selectedName"
+            class="js-example-basic-single w-48 border-gray-300 rounded-lg"
+            @if(empty($nameOptions)) disabled @endif
+        >
+            <option value="">Semua Nama</option>
+            @foreach($nameOptions as $id => $name)
+                <option value="{{ $id }}">{{ $name }}</option>
+            @endforeach
         </select>
     
         <!-- tombol trigger filter -->
