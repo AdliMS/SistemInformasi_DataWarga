@@ -6,15 +6,18 @@ use Closure;
 use Filament\Forms;
 use Filament\Panel;
 use Filament\Tables;
+use Filament\Forms\Get;
 use App\Models\Civilian;
 use Filament\Forms\Form;
 use App\Models\DataWarga;
+use App\Models\Education;
 use App\Models\Liability;
 use Filament\Tables\Table;
 use App\Models\CivilianJob;
 use Illuminate\Support\Carbon;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
+use Filament\Support\Enums\Alignment;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -107,13 +110,20 @@ class DataWargaResource extends Resource
                                 "Pria" => "Pria",
                                 "Wanita" => "Wanita"
                             ]),
-                        Select::make('last_education')
+                        Select::make('education_id')
                             ->required()
                             ->label('Pendidikan terakhir')
-                            // ->relationship('liabilities', 'last_education')
+                            ->relationship('education', 'last_education')
                             // ->createOptionForm([
                             //     TextInput::make('last_education')
                             // ])
+                            // ->createOptionUsing(function ($data) {
+                            //     // Simpan data ke tabel educations
+                            //     $education = Education::create([
+                            //         'last_education' => $data['last_education'],
+                            //     ]);
+                            //     return $education->id; // Kembalikan ID opsi baru
+                            // })
                             ->options([
                                 "Belum menempuh pendidikan" => "Belum menempuh pendidikan",
                                 "TK" => "TK",
@@ -126,7 +136,8 @@ class DataWargaResource extends Resource
                                 "S3" => "S3",
 
                             ])
-                    ]),
+
+                    ])->addActionAlignment(Alignment::End),
 
                 Repeater::make('civilian_pivot_jobs')
                     ->required()
@@ -174,7 +185,7 @@ class DataWargaResource extends Resource
                                 "Sekarang" => "Sekarang",
                             ]),
                     ])
-
+                    ->addActionAlignment(Alignment::End)
             ]);
     }
 

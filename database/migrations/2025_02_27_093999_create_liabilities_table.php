@@ -22,6 +22,10 @@ return new class extends Migration
             $table->foreign('civilian_id')->nullable()
             ->nullable()->references('id')->on('civilians')->onDelete('cascade');
 
+            $table->unsignedBigInteger('education_id');
+            $table->foreign('education_id')->nullable()
+            ->nullable()->references('id')->on('educations')->onDelete('cascade');
+
             $table->timestamps();
         });
     }
