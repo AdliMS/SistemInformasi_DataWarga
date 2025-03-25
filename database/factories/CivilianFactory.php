@@ -18,7 +18,7 @@ class CivilianFactory extends Factory
     {
         return [
             'full_name' => fake()->name(),
-            'gender' => fake()->word(),
+            'gender' => (bool)random_int(0, 1),
             'born_place' => fake()->word(),
             'born_date' => fake()->dateTime(),
             'nik' => mt_rand(),

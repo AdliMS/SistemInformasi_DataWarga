@@ -13,14 +13,6 @@ class StatusPernikahan extends Page
 
     protected function getFormSchema(): array
     {
-        return [
-            Select::make('category_id')
-                ->label('Kategori')
-                ->options([
-                    1 => 'Option 1',
-                    2 => 'Option 2',
-                    3 => 'Option 3',
-                ])
-        ];
+        return [];
     }
 }

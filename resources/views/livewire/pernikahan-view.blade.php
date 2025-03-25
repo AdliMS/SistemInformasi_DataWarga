@@ -42,29 +42,33 @@
         }
     </style>
 
-    <!-- selectbox untuk filter status pernikahan -->
     <div class="flex h-20 p-2 gap-2 items-center">
+        <!-- selectbox untuk filter status pernikahan -->
         <select 
             wire:model.defer="statusPernikahan" 
-            wire:change="loadNameOptions"
-            class="js-example-basic-single w-48 border-gray-300 rounded-lg">
+            class="js-example-basic-single">
                 <option value="" default>Semua</option>
                 <option value="belum_menikah">Belum menikah</option>
                 <option value="sudah_menikah">Sudah menikah</option>
         </select>
 
-        <!-- selectbox untuk filter nama warga (civilian) -->
-        <select 
-            wire:model.defer="selectedName" 
-            wire:model.debounce.500ms="selectedName"
-            class="js-example-basic-single w-48 border-gray-300 rounded-lg"
-            @if(empty($nameOptions)) disabled @endif
-        >
-            <option value="">Semua Nama</option>
-            @foreach($nameOptions as $id => $name)
-                <option value="{{ $id }}">{{ $name }}</option>
-            @endforeach
-        </select>
+        <!-- Input Pencarian Nama -->
+        <div class="relative w-48">
+            <input
+                type="text"
+                wire:model.debounce.500ms="searchName"
+                placeholder="Cari nama warga..."
+                class="w-full border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+            <!-- Clear Button -->
+            <button 
+                wire:click="$set('searchName', '')"
+                class="absolute right-2 top-2 text-gray-400 hover:text-gray-600"
+                style="{{ empty($searchName) ? 'display:none' : '' }}"
+            >
+                ✕
+            </button>
+        </div>
     
         <!-- tombol trigger filter -->
         <button 
@@ -76,6 +80,18 @@
             Terapkan Filter
         </button>
     </div>
+
+    {{-- <div>
+        <div wire:ignore> 
+            <select class="select2" name="state">
+                <option value="AL">Alabama</option>
+                <option value="WY">Wyoming</option>
+            </select>
+     
+            <!-- Select2 will insert its DOM here. -->
+        </div>
+    </div> --}}
+
     
 
     <!-- Tabel untuk Data civilians -->
@@ -101,7 +117,12 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ $civilian->full_name }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ \Carbon\Carbon::parse($civilian->born_date)->age . ' tahun' }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $civilian->gender }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap"> 
+                        @if ($civilian->gender)
+                            Wanita
+                        @else
+                            Pria
+                        @endif
                     <td class="px-6 py-4 whitespace-nowrap">{{ $civilian->phone_number }}</td>
                 </tr>
             @endforeach
@@ -124,23 +145,64 @@
 </div>
 
 @assets
-<!-- Pastikan jQuery dan Select2 dimuat -->
-<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 @endassets
 
-@script
-<!-- Inisialisasi Select2 -->
+{{-- @push('scripts')
 <script>
     $(document).ready(function() {
-        $('.js-example-basic-single').select2();
-
-        // Event saat select berubah
-        $('.js-example-basic-single').on('change', function(event) {
-            @this.set('statusPernikahan', event.target.value); // Update Livewire property langsung
-        });
+        $('.select2').select2();
     });
 </script>
-@endscript
+@endpush --}}
+
+@push('scripts')
+<script>
+    document.addEventListener('livewire:init', () => {
+        let namaSelect2 = null;
+    
+        // Inisialisasi Select2 untuk status
+        $('#statusSelect').select2({
+            width: '100%'
+        });
+    
+        // Fungsi untuk inisialisasi ulang select nama
+        const initNamaSelect = () => {
+            if (namaSelect2) {
+                namaSelect2.destroy();
+            }
+            
+            namaSelect2 = $('#namaSelect').select2({
+                width: '100%'
+            }).on('change', function() {
+                @this.set('selectedName', $(this).val());
+            });
+        };
+        
+        // Inisialisasi pertama
+        initNamaSelect();
+    
+        // Handle ketika opsi nama berubah
+        Livewire.on('updateNamaOptions', (options) => {
+            const select = $('#namaSelect')[0];
+            select.innerHTML = '<option value="">Semua Nama</option>';
+            
+            options.forEach(option => {
+                select.add(new Option(option.name, option.id));
+            });
+            
+            initNamaSelect();
+            $('#namaSelect').val(@this.get('selectedName')).trigger('change');
+        });
+    
+        // Cleanup saat komponen di-destroy
+        Livewire.hook('component.destroy', ({ component }) => {
+            if (component.id === @this.__instance.id && namaSelect2) {
+                namaSelect2.destroy();
+            }
+        });
+    });
+    </script>
+@endpush

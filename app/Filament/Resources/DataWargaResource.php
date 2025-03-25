@@ -110,20 +110,9 @@ class DataWargaResource extends Resource
                                 "Pria" => "Pria",
                                 "Wanita" => "Wanita"
                             ]),
-                        Select::make('education_id')
+                        Select::make('last_education')
                             ->required()
                             ->label('Pendidikan terakhir')
-                            ->relationship('education', 'last_education')
-                            // ->createOptionForm([
-                            //     TextInput::make('last_education')
-                            // ])
-                            // ->createOptionUsing(function ($data) {
-                            //     // Simpan data ke tabel educations
-                            //     $education = Education::create([
-                            //         'last_education' => $data['last_education'],
-                            //     ]);
-                            //     return $education->id; // Kembalikan ID opsi baru
-                            // })
                             ->options([
                                 "Belum menempuh pendidikan" => "Belum menempuh pendidikan",
                                 "TK" => "TK",
@@ -219,8 +208,8 @@ class DataWargaResource extends Resource
                     ->label('Alamat'),
                 TextColumn::make('married_status')
                     ->label('Status pernikahan')
-                    ->formatStateUsing(function ($state, Civilian $Civilian) {
-                        if ($Civilian->married_status == false) {
+                    ->formatStateUsing(function ($state, Civilian $civilian) {
+                        if ($civilian->married_status == false) {
                             return 'Belum menikah';
                         }
                         return 'Sudah menikah';
