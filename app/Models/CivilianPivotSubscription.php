@@ -17,6 +17,15 @@ class CivilianPivotSubscription extends Model
         'temp_amount'
     ];
 
+    protected $casts = [
+        'paid_months' => 'array', // Pastikan ini ada
+    ];
+
+    public function getIsPaidAttribute()
+{
+    return !empty($this->paid_months);
+}
+
     protected static function boot()
     {
         parent::boot();
@@ -51,7 +60,7 @@ class CivilianPivotSubscription extends Model
         return $this->belongsTo(Civilian::class);
     }
 
-    // Relasi ke model SkillCategory
+    // Relasi ke model Category
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);

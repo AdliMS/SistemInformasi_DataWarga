@@ -53,7 +53,7 @@
         </select>
 
         <!-- Input Pencarian Nama -->
-        <div class="relative w-48">
+        {{-- <div class="relative w-48">
             <input
                 type="text"
                 wire:model.debounce.500ms="searchName"
@@ -68,7 +68,7 @@
             >
                 ✕
             </button>
-        </div>
+        </div> --}}
     
         <!-- tombol trigger filter -->
         <button 
@@ -80,21 +80,33 @@
             Terapkan Filter
         </button>
     </div>
+
+    {{-- <div>
+        <div wire:ignore> 
+            <select class="select2" name="state">
+                <option value="AL">Alabama</option>
+                <option value="WY">Wyoming</option>
+            </select>
+     
+            <!-- Select2 will insert its DOM here. -->
+        </div>
+    </div> --}}
+
     
 
     <!-- Tabel untuk Data civilians -->
     <table class="custom-table mt-4">
         <thead>
             <tr>
-                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">Status pernikahan</th>
-                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">Nama lengkap</th>
-                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">Umur</th>
-                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">Jenis kelamin</th>
-                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">No. HP</th>
+                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">Nama warga</th>
+                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">Januari</th>
+                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">Februari</th>
+                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">so on...</th>
+
             </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
-            @foreach ($civilians as $civilian)
+            {{-- @foreach ($civilians as $civilian)
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap">
                         @if ($civilian->married_status)
@@ -111,10 +123,9 @@
                         @else
                             Pria
                         @endif
-                    </td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ $civilian->phone_number }}</td>
                 </tr>
-            @endforeach
+            @endforeach --}}
         </tbody>
     </table>
 
@@ -135,4 +146,63 @@
 
 @assets
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 @endassets
+
+{{-- @push('scripts')
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
+</script>
+@endpush --}}
+
+@push('scripts')
+<script>
+    document.addEventListener('livewire:init', () => {
+        let namaSelect2 = null;
+    
+        // Inisialisasi Select2 untuk status
+        $('#statusSelect').select2({
+            width: '100%'
+        });
+    
+        // Fungsi untuk inisialisasi ulang select nama
+        const initNamaSelect = () => {
+            if (namaSelect2) {
+                namaSelect2.destroy();
+            }
+            
+            namaSelect2 = $('#namaSelect').select2({
+                width: '100%'
+            }).on('change', function() {
+                @this.set('selectedName', $(this).val());
+            });
+        };
+        
+        // Inisialisasi pertama
+        initNamaSelect();
+    
+        // Handle ketika opsi nama berubah
+        Livewire.on('updateNamaOptions', (options) => {
+            const select = $('#namaSelect')[0];
+            select.innerHTML = '<option value="">Semua Nama</option>';
+            
+            options.forEach(option => {
+                select.add(new Option(option.name, option.id));
+            });
+            
+            initNamaSelect();
+            $('#namaSelect').val(@this.get('selectedName')).trigger('change');
+        });
+    
+        // Cleanup saat komponen di-destroy
+        Livewire.hook('component.destroy', ({ component }) => {
+            if (component.id === @this.__instance.id && namaSelect2) {
+                namaSelect2.destroy();
+            }
+        });
+    });
+    </script>
+@endpush

@@ -18,14 +18,14 @@ class Category extends Model
         'amount',
     ];
 
-    // public function civilians(): BelongsToMany {
-    //     return $this->belongsToMany(Civilian::class, 'employee_pivot_skills', 'employee_id', 'skill_id');
-    // }
+    public function civilians(): BelongsToMany {
+        return $this->belongsToMany(Civilian::class, 'employee_pivot_skills', 'employee_id', 'skill_id');
+    } // potential error
 
-    public function civilians(): HasMany
-    {
-        return $this->hasMany(Civilian::class);
-    }
+    // public function civilians(): HasMany
+    // {
+    //     return $this->hasMany(Civilian::class);
+    // }
 
     public function subscription(): BelongsTo
     {

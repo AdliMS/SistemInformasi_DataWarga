@@ -1,5 +1,5 @@
 <div>
-    {{-- To attain knowledge, add things every day; To attain wisdom, subtract things every day. --}}
+
     <style>
         /* Style untuk tabel */
         .custom-table {
@@ -43,13 +43,14 @@
     </style>
 
     <div class="flex h-20 p-2 gap-2 items-center">
-        <!-- selectbox untuk filter status pernikahan -->
-        <select 
-            wire:model.defer="statusPernikahan" 
+        <!-- Selectbox untuk filter kategori -->
+    <select 
+            wire:model.defer="selectedCategory" 
             class="js-example-basic-single">
-                <option value="" default>Semua</option>
-                <option value="belum_menikah">Belum menikah</option>
-                <option value="sudah_menikah">Sudah menikah</option>
+                <option value="" default>Semua Kategori</option>
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                @endforeach
         </select>
 
         <!-- Input Pencarian Nama -->
@@ -60,7 +61,6 @@
                 placeholder="Cari nama warga..."
                 class="w-full border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
             >
-            <!-- Clear Button -->
             <button 
                 wire:click="$set('searchName', '')"
                 class="absolute right-2 top-2 text-gray-400 hover:text-gray-600"
@@ -69,8 +69,8 @@
                 ✕
             </button>
         </div>
-    
-        <!-- tombol trigger filter -->
+
+        <!-- Tombol Filter -->
         <button 
             wire:click="applyFilter"
             wire:loading.attr="disabled"
@@ -79,14 +79,21 @@
             <span wire:loading wire:target="applyFilter" class="animate-spin">⏳</span>
             Terapkan Filter
         </button>
-    </div>
-    
 
-    <!-- Tabel untuk Data civilians -->
+        <!-- Tombol Reset -->
+        {{-- <button 
+            wire:click="resetFilters"
+            class="text-gray-600 hover:text-gray-800 text-sm"
+        >
+            Reset
+        </button> --}}
+    </div>
+
+    <!-- Tabel Data -->
     <table class="custom-table mt-4">
         <thead>
             <tr>
-                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">Status pernikahan</th>
+                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">Kategori</th>
                 <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">Nama lengkap</th>
                 <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">Umur</th>
                 <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">Jenis kelamin</th>
@@ -96,15 +103,16 @@
         <tbody class="bg-white divide-y divide-gray-200">
             @foreach ($civilians as $civilian)
                 <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        @if ($civilian->married_status)
-                            Sudah menikah
-                        @else
-                            Belum menikah
-                        @endif
+                    <td class="px-6 py-4 whitespace-nowrap ">
+                        <div class="flex flex-wrap gap-1 text-blue-500">
+                            @foreach($civilian->categories as $category)
+                            
+                                    {{ $category->name }}
+                            @endforeach
+                        </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ $civilian->full_name }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ \Carbon\Carbon::parse($civilian->born_date)->age . ' tahun' }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ \Carbon\Carbon::parse($civilian->born_date)->age }} tahun</td>
                     <td class="px-6 py-4 whitespace-nowrap"> 
                         @if ($civilian->gender)
                             Wanita
@@ -118,19 +126,11 @@
         </tbody>
     </table>
 
+
     <!-- Pagination -->
-    {{-- <div class="flex justify-between items-center mt-4">
-        <div class="pagination-info">
-            Menampilkan {{ $civilians->firstItem() }} sampai {{ $civilians->lastItem() }} dari {{ $civilians->total() }} hasil
-        </div>
-        <div class="flex items-center space-x-2">
-            <select wire:model="perPage" class="pagination-select">
-                <option value="10">10 per halaman</option>
-                <option value="20">20 per halaman</option>
-                <option value="50">50 per halaman</option>
-            </select>
-        </div>
-    </div> --}}
+    <div class="mt-4">
+        {{ $civilians->links() }}
+    </div>
 </div>
 
 @assets

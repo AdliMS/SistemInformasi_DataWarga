@@ -80,7 +80,7 @@ class DataIuranResource extends Resource
                 TextColumn::make('subscription.name')
                     ->label('Kategori Iuran')
                     ->searchable(),
-                TextColumn::make('temp_amount')
+                TextColumn::make('subscription.amount')
                     ->label('Nominal iuran')
                     ->money('IDR')
                     ->searchable(),

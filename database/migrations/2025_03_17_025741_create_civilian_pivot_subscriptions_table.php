@@ -22,7 +22,8 @@ return new class extends Migration
             $table->foreign('civilian_id')->nullable()
             ->nullable()->references('id')->on('civilians')->onDelete('cascade');
 
-            $table->string('temp_amount')->nullable();
+            // $table->string('temp_amount')->nullable();
+            $table->string('payment_month')->nullable();
 
             $table->timestamps();
         });
