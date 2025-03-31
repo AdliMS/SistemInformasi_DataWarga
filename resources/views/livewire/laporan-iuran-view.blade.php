@@ -1,5 +1,4 @@
 <div>
-    {{-- To attain knowledge, add things every day; To attain wisdom, subtract things every day. --}}
     <style>
         /* Style untuk tabel */
         .custom-table {
@@ -8,201 +7,77 @@
             background-color: #ffffff;
             border: 1px solid #e2e8f0;
         }
-
-        .custom-table th,
-        .custom-table td {
-            padding: 12px 16px;
-            text-align: left;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .custom-table th {
-            background-color: #f7fafc;
-            font-weight: 600;
-            color: #4a5568;
-            text-transform: uppercase;
-            font-size: 0.875rem;
-        }
-
-        .custom-table tbody tr:hover {
-            background-color: #f0f4f8;
-        }
-
-        /* style untuk pagination */
-        .pagination-info {
-            font-size: 0.875rem;
-            color: #4a5568;
-        }
-
-        .pagination-select {
-            padding: 6px 12px;
-            border: 1px solid #e2e8f0;
-            border-radius: 4px;
-            font-size: 0.875rem;
-        }
+        /* ... (keep your existing styles) ... */
     </style>
 
-    <div class="flex h-20 p-2 gap-2 items-center">
-        <!-- selectbox untuk filter status pernikahan -->
-        <select 
-            wire:model.defer="statusPernikahan" 
-            class="js-example-basic-single">
-                <option value="" default>Semua</option>
-                <option value="belum_menikah">Belum menikah</option>
-                <option value="sudah_menikah">Sudah menikah</option>
-        </select>
-
-        <!-- Input Pencarian Nama -->
-        {{-- <div class="relative w-48">
-            <input
-                type="text"
-                wire:model.debounce.500ms="searchName"
-                placeholder="Cari nama warga..."
-                class="w-full border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
+    <div class="p-4 mb-6 bg-white rounded-lg shadow">
+        <h2 class="text-lg font-medium text-gray-900 mb-4">Laporan iuran untuk: {{ $subscriptionType }}</h2>
+        
+        <div class="w-full md:w-1/3">
+            <label for="subscription-select" class="block text-sm font-medium text-gray-700 mb-1">Pilih Jenis Iuran</label>
+            <select 
+                id="subscription-select"
+                wire:model.live="subscriptionId" 
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
             >
-            <!-- Clear Button -->
-            <button 
-                wire:click="$set('searchName', '')"
-                class="absolute right-2 top-2 text-gray-400 hover:text-gray-600"
-                style="{{ empty($searchName) ? 'display:none' : '' }}"
-            >
-                ✕
-            </button>
-        </div> --}}
-    
-        <!-- tombol trigger filter -->
-        <button 
-            wire:click="applyFilter"
-            wire:loading.attr="disabled"
-            class="bg-blue-500 font-medium px-2 rounded-lg flex items-center h-10"
-        >
-            <span wire:loading wire:target="applyFilter" class="animate-spin">⏳</span>
-            Terapkan Filter
-        </button>
+                <option value="">-- Pilih Jenis Iuran --</option>
+                @foreach($subscriptions as $subscription)
+                    <option value="{{ $subscription->id }}">{{ $subscription->name }}</option>
+                @endforeach
+            </select>
+        </div>
     </div>
 
-    {{-- <div>
-        <div wire:ignore> 
-            <select class="select2" name="state">
-                <option value="AL">Alabama</option>
-                <option value="WY">Wyoming</option>
-            </select>
-     
-            <!-- Select2 will insert its DOM here. -->
+    @if($subscriptionId)
+        <div class="overflow-x-auto bg-white rounded-lg shadow">
+            <table class="min-w-full border border-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Warga</th>
+                        @foreach (['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'] as $month)
+                            <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $month }}</th>
+                        @endforeach
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse ($civilians as $civilian)
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                {{ $civilian['name'] }}
+                                
+                            </td>
+                            @foreach (range(1, 12) as $month)
+                                @php
+                                    $monthFormatted = date('Y-m', mktime(0, 0, 0, $month, 1, date('Y')));
+                                    $isPaid = in_array($monthFormatted, $civilian['paid_months'] ?? []) || 
+                                            in_array($month, $civilian['paid_months'] ?? []);
+                                @endphp
+                                <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                    @if($isPaid)
+                                        <span class="text-green-500">✓</span>
+                                    @else
+                                        <span class="text-gray-400">-</span>
+                                    @endif
+                                </td>
+                            @endforeach
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="13" class="px-6 py-4 text-center text-sm text-gray-500">
+                                Tidak ada data yang tersedia untuk iuran ini
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
-    </div> --}}
-
-    
-
-    <!-- Tabel untuk Data civilians -->
-    <table class="custom-table mt-4">
-        <thead>
-            <tr>
-                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">Nama warga</th>
-                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">Januari</th>
-                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">Februari</th>
-                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">so on...</th>
-
-            </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-            {{-- @foreach ($civilians as $civilian)
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        @if ($civilian->married_status)
-                            Sudah menikah
-                        @else
-                            Belum menikah
-                        @endif
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $civilian->full_name }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ \Carbon\Carbon::parse($civilian->born_date)->age . ' tahun' }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap"> 
-                        @if ($civilian->gender)
-                            Wanita
-                        @else
-                            Pria
-                        @endif
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $civilian->phone_number }}</td>
-                </tr>
-            @endforeach --}}
-        </tbody>
-    </table>
-
-    <!-- Pagination -->
-    {{-- <div class="flex justify-between items-center mt-4">
-        <div class="pagination-info">
-            Menampilkan {{ $civilians->firstItem() }} sampai {{ $civilians->lastItem() }} dari {{ $civilians->total() }} hasil
+    @else
+        <div class="p-4 bg-white rounded-lg shadow text-center text-gray-500">
+            Silakan pilih jenis iuran untuk melihat laporan
         </div>
-        <div class="flex items-center space-x-2">
-            <select wire:model="perPage" class="pagination-select">
-                <option value="10">10 per halaman</option>
-                <option value="20">20 per halaman</option>
-                <option value="50">50 per halaman</option>
-            </select>
-        </div>
-    </div> --}}
+    @endif
 </div>
 
 @assets
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 @endassets
-
-{{-- @push('scripts')
-<script>
-    $(document).ready(function() {
-        $('.select2').select2();
-    });
-</script>
-@endpush --}}
-
-@push('scripts')
-<script>
-    document.addEventListener('livewire:init', () => {
-        let namaSelect2 = null;
-    
-        // Inisialisasi Select2 untuk status
-        $('#statusSelect').select2({
-            width: '100%'
-        });
-    
-        // Fungsi untuk inisialisasi ulang select nama
-        const initNamaSelect = () => {
-            if (namaSelect2) {
-                namaSelect2.destroy();
-            }
-            
-            namaSelect2 = $('#namaSelect').select2({
-                width: '100%'
-            }).on('change', function() {
-                @this.set('selectedName', $(this).val());
-            });
-        };
-        
-        // Inisialisasi pertama
-        initNamaSelect();
-    
-        // Handle ketika opsi nama berubah
-        Livewire.on('updateNamaOptions', (options) => {
-            const select = $('#namaSelect')[0];
-            select.innerHTML = '<option value="">Semua Nama</option>';
-            
-            options.forEach(option => {
-                select.add(new Option(option.name, option.id));
-            });
-            
-            initNamaSelect();
-            $('#namaSelect').val(@this.get('selectedName')).trigger('change');
-        });
-    
-        // Cleanup saat komponen di-destroy
-        Livewire.hook('component.destroy', ({ component }) => {
-            if (component.id === @this.__instance.id && namaSelect2) {
-                namaSelect2.destroy();
-            }
-        });
-    });
-    </script>
-@endpush

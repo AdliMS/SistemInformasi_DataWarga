@@ -12,9 +12,8 @@ class CivilianPivotSubscription extends Model
     protected $table = 'civilian_pivot_subscriptions';
     protected $fillable = [
         'civilian_id',
-        'category_id',
         'subscription_id',
-        'temp_amount'
+        'paid_months'
     ];
 
     protected $casts = [

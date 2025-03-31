@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('civilian_pivot_subscriptions', function (Blueprint $table) {
-            $table->json('paid_months')->nullable()->change();
+            $table->json('paid_months')->change();
         });
     }
 
@@ -21,8 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('civilian_pivot_subscriptions', function (Blueprint $table) {
-            //
-        });
+        //
     }
 };
