@@ -98,7 +98,7 @@
                 <th>Nama</th>
                 <th>Tempat Kerja</th>
                 <th>Tahun Masuk</th>
-                <th>Tahun Pensiun</th>
+                <th>Tahun Berlangsung</th>
                 <th>Status</th>
             </tr>
         </thead>

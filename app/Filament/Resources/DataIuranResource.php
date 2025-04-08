@@ -2,8 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Panel;
+use Closure;
 use Filament\Forms;
+use Filament\Panel;
 use Filament\Tables;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
@@ -13,6 +14,7 @@ use App\Models\DataIuran;
 use Filament\Tables\Table;
 use App\Models\Subscription;
 use Filament\Resources\Resource;
+use App\Models\CivilianPivotCategory;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -22,7 +24,6 @@ use Illuminate\Database\Eloquent\Collection;
 use App\Filament\Resources\DataIuranResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\DataIuranResource\RelationManagers;
-use App\Models\CivilianPivotCategory;
 
 class DataIuranResource extends Resource
 {
@@ -66,7 +67,21 @@ class DataIuranResource extends Resource
                     ->disabled(function (callable $get) {
                         // Nonaktifkan select box jika subscription belum dipilih
                         return !$get('subscription_id');
-                    }),
+                    })
+                    ->rules([
+                        function (Forms\Get $get) {
+                            return function (string $attribute, $value, Closure $fail) use ($get) {
+                                $exists = CivilianPivotSubscription::where('subscription_id', $get('subscription_id'))
+                                    ->where('civilian_id', $value)
+                                    ->exists();
+                                    
+                                if ($exists) {
+                                    $fail('Warga ini sudah terdaftar untuk iuran ini.');
+                                }
+                            };
+                        },
+                    ]),
+                    
             ]);
     }
 

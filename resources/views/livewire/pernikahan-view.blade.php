@@ -96,13 +96,15 @@
         <tbody class="bg-white divide-y divide-gray-200">
             @foreach ($civilians as $civilian)
                 <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        @if ($civilian->married_status)
+                    @if ($civilian->married_status)
+                        <td class="px-6 py-4 whitespace-nowrap text-blue-500">
                             Sudah menikah
-                        @else
+                        </td>
+                    @else
+                        <td class="px-6 py-4 whitespace-nowrap text-red-500">
                             Belum menikah
-                        @endif
-                    </td>
+                        </td>
+                    @endif
                     <td class="px-6 py-4 whitespace-nowrap">{{ $civilian->full_name }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ \Carbon\Carbon::parse($civilian->born_date)->age . ' tahun' }}</td>
                     <td class="px-6 py-4 whitespace-nowrap"> 
@@ -118,19 +120,6 @@
         </tbody>
     </table>
 
-    <!-- Pagination -->
-    {{-- <div class="flex justify-between items-center mt-4">
-        <div class="pagination-info">
-            Menampilkan {{ $civilians->firstItem() }} sampai {{ $civilians->lastItem() }} dari {{ $civilians->total() }} hasil
-        </div>
-        <div class="flex items-center space-x-2">
-            <select wire:model="perPage" class="pagination-select">
-                <option value="10">10 per halaman</option>
-                <option value="20">20 per halaman</option>
-                <option value="50">50 per halaman</option>
-            </select>
-        </div>
-    </div> --}}
 </div>
 
 @assets

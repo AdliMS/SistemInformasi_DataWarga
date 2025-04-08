@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use Filament\Pages\Page;
 
+
 class Pekerjaan extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-document-text';

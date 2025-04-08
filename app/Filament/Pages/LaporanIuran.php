@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use Filament\Pages\Page;
+use Illuminate\Contracts\Support\Htmlable;
 
 class LaporanIuran extends Page
 {
@@ -12,4 +13,6 @@ class LaporanIuran extends Page
     protected static ?string $navigationLabel = 'Laporan';
     protected static ?string $navigationGroup = 'Iuran';
     protected static ?string $label = 'Laporan Iuran';
+
+   
 }
