@@ -60,6 +60,12 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
             ])
+            ->navigationGroups([
+                'Master Data',
+                'Kategori',
+                'Iuran',
+                'Laporan',
+            ])
             ->spa()
             ->middleware([
                 EncryptCookies::class,

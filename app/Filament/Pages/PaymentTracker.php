@@ -13,6 +13,7 @@ class PaymentTracker extends Page
     protected static ?string $navigationGroup = 'Iuran';
     protected static ?string $navigationLabel = 'Pembayaran';
     protected static string $view = 'filament.pages.payment-tracker';
+    protected static ?int $navigationSort = 2;
 
     public function getHeading(): string|Htmlable
     {

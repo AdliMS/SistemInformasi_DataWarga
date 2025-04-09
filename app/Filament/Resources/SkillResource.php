@@ -26,6 +26,7 @@ class SkillResource extends Resource
     protected static ?string $navigationLabel = 'Warga';
     protected static ?string $navigationGroup = 'Kategori';
     protected static ?string $label = 'Kategori Warga';
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {

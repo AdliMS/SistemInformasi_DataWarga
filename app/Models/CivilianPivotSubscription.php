@@ -21,37 +21,9 @@ class CivilianPivotSubscription extends Model
     ];
 
     public function getIsPaidAttribute()
-{
-    return !empty($this->paid_months);
-}
-
-    protected static function boot()
     {
-        parent::boot();
-
-        static::creating(function ($subscription) {
-            $subscription->calculateTempAmount();
-        });
-
-        static::updating(function ($subscription) {
-            $subscription->calculateTempAmount();
-        });
+        return !empty($this->paid_months);
     }
-
-    public function calculateTempAmount()
-    {
-        $civilian = Civilian::with('category')->find($this->civilian_id);
-        $subscription = Subscription::find($this->subscription_id);
-
-        $categoryAmount = $civilian?->category?->amount ?? 0;
-        $subscriptionAmount = $subscription?->amount ?? 0;
-
-        // Menjumlahkan amount dari category dan subscription
-        $this->temp_amount = $categoryAmount + $subscriptionAmount;
-    }
-
-
-    
 
     // Relasi ke model Employee
     public function civilian(): BelongsTo

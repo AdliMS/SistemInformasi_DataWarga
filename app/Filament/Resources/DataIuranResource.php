@@ -33,6 +33,7 @@ class DataIuranResource extends Resource
     protected static ?string $navigationGroup = 'Iuran';
     protected static ?string $navigationLabel = 'Data Iuran';
     protected static ?string $label = 'Data Iuran';
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {

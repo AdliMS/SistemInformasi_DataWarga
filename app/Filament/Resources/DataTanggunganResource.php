@@ -29,6 +29,7 @@ class DataTanggunganResource extends Resource
     protected static ?string $navigationGroup = 'Master Data';
     protected static ?string $navigationLabel = 'Data Tanggungan';
     protected static ?string $label = 'Data Tanggungan';
+    protected static ?int $navigationSort = 3;
 
     public static function canCreate(): bool
     {

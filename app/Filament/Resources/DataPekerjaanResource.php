@@ -25,6 +25,7 @@ class DataPekerjaanResource extends Resource
     protected static ?string $navigationGroup = 'Master Data';
     protected static ?string $navigationLabel = 'Data Pekerjaan';
     protected static ?string $label = 'Data Pekerjaan';
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {

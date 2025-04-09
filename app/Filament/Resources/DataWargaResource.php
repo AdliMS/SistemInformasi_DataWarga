@@ -35,6 +35,7 @@ class DataWargaResource extends Resource
     protected static ?string $navigationGroup = 'Master Data';
     protected static ?string $navigationLabel = 'Data Warga';
     protected static ?string $label = 'Data Warga';
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
