@@ -15,15 +15,13 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('subscription_id');
-            $table->foreign('subscription_id')->nullable()
-            ->nullable()->references('id')->on('subscriptions')->onDelete('cascade');
+            $table->foreign('subscription_id')->nullable()->references('id')->on('subscriptions')->onDelete('cascade');
 
             $table->unsignedBigInteger('civilian_id');
-            $table->foreign('civilian_id')->nullable()
-            ->nullable()->references('id')->on('civilians')->onDelete('cascade');
+            $table->foreign('civilian_id')->nullable()->references('id')->on('civilians')->onDelete('cascade');
 
-            // $table->string('temp_amount')->nullable();
             $table->string('paid_months')->nullable();
+            $table->decimal('debit', 2, 2)->nullable();
 
             $table->timestamps();
         });

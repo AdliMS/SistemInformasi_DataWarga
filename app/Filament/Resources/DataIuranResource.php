@@ -33,7 +33,6 @@ class DataIuranResource extends Resource
     protected static ?string $navigationGroup = 'Iuran';
     protected static ?string $navigationLabel = 'Data Iuran';
     protected static ?string $label = 'Data Iuran';
-    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
@@ -41,6 +40,7 @@ class DataIuranResource extends Resource
             ->schema([
 
                 Select::make('subscription_id')
+                    ->required()
                     ->options(Subscription::pluck('name', 'id'))
                     ->label('Nama iuran')
                     // ->required()
@@ -60,7 +60,7 @@ class DataIuranResource extends Resource
                 Select::make('civilian_id')
                     // ->relationship('subscription', 'name')
                     ->label('Nama warga')
-                    // ->required()
+                    ->required()
                     ->options(function (callable $get) {
                         // Ambil data civilian berdasarkan subscription yang dipilih
                         return $get('civilians') ?? [];
@@ -75,14 +75,14 @@ class DataIuranResource extends Resource
                                 $exists = CivilianPivotSubscription::where('subscription_id', $get('subscription_id'))
                                     ->where('civilian_id', $value)
                                     ->exists();
-                                    
+
                                 if ($exists) {
                                     $fail('Warga ini sudah terdaftar untuk iuran ini.');
                                 }
                             };
                         },
                     ]),
-                    
+
             ]);
     }
 

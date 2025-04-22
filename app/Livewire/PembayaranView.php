@@ -2,9 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Models\Expense;
 use Livewire\Component;
 use App\Models\Civilian;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use App\Models\CivilianPivotSubscription;
 
 class PembayaranView extends Component
@@ -33,35 +35,69 @@ class PembayaranView extends Component
     }
 
     public function togglePayment($pivotId, $monthKey)
-    {
-        $pivot = CivilianPivotSubscription::findOrFail($pivotId);
+{
+    $pivot = CivilianPivotSubscription::with(['subscription', 'civilian'])->findOrFail($pivotId);
+    $amount = (float) preg_replace('/[^0-9]/', '', $pivot->subscription->amount);
+
+    DB::transaction(function () use ($pivot, $monthKey, $amount) {
         $currentMonths = $pivot->paid_months ?? [];
-
-        // Pastikan $currentMonths selalu array sequential
-        $currentMonths = array_values($currentMonths);
-
+        
         if (in_array($monthKey, $currentMonths)) {
+            // Jika bulan dicentang ulang (batalkan pembayaran)
             $currentMonths = array_diff($currentMonths, [$monthKey]);
+            $pivot->debit -= $amount;
+            
+            // Hapus record pemasukan terkait
+            $data = Expense::where([
+                'civilian_pivot_subscription_id' => $pivot->id,
+                // 'expense_date' => Carbon::parse($monthKey)->startOfMonth()
+            ])->delete();
+            // dd($data);
         } else {
+            // Jika bulan baru dicentang (catat pembayaran)
             $currentMonths = array_merge($currentMonths, [$monthKey]);
+            $pivot->debit += $amount;
+            
+            // Buat record pemasukan
+            $data = Expense::create([
+                'expense_name' => 'iuran ' . $pivot->civilian->full_name,
+                'amount' => $amount,
+                'is_income' => true, // Tambahkan kolom ini di migration
+                'expense_date' => Carbon::parse($monthKey)->startOfMonth(),
+                'subscription_id' => $pivot->subscription_id,
+                'civilian_pivot_subscription_id' => $pivot->id,
+            ]);
+
+            // dd($data);
         }
 
-        // Pastikan format tetap konsisten
+        // dd($pivot);
         $pivot->paid_months = array_values(array_unique($currentMonths));
         $pivot->save();
-    }
+    });
+}
 
     public function render()
     {
         $subscriptions = CivilianPivotSubscription::with(['subscription', 'civilian'])
             ->get()
             ->map(function ($subscription) {
-                $subscription->availableMonths = $this->generateMonthsFromRegistrationDate(
-                    $subscription->civilian->created_at
-                );
-                return $subscription;
+                // Hitung ulang total_paid jika null / potential error
+                if (is_null($subscription->debit)) {
+                    $monthlyAmount = (float) preg_replace('/[^0-9]/', '', $subscription->subscription->amount);
+                    $subscription->debit = count($subscription->paid_months ?? []) * $monthlyAmount;
+                    $subscription->save();
+                }
+                
+                // Return array bukan model Eloquent
+                return [
+                    'model' => $subscription,
+                    'availableMonths' => $this->generateMonthsFromRegistrationDate(
+                        $subscription->civilian->created_at
+                    )
+                ];
             });
-
+    
         return view('livewire.pembayaran-view', [
             'subscriptions' => $subscriptions
         ]);

@@ -42,25 +42,34 @@
         }
     </style>
 
-
-
     <!-- Tabel untuk Data civilians -->
-    <table class="custom-table mt-4">
+    <table class="  mt-4 dark:border-gray-700">
         <thead>
-            <tr>
+            <tr class="bg-gray-100 dark:bg-gray-800">
                 <th>Jenis Iuran</th>
                 <th>Nama Warga</th>
-                <th></th>
+                <th>Total Dibayar</th>
+                <th>Aksi</th>
             </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
+        <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-500">
             @foreach($subscriptions as $subscription)
-                <tr wire:key="sub-{{ $subscription->id }}">
-
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $subscription->subscription->name }} - {{ $subscription->subscription->amount }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $subscription->civilian->full_name }}</td>
-
-                    <td class="relative" x-data="{ open: false }">
+                @php
+                    $subs = $subscription['model'];
+                    $availableMonths = $subscription['availableMonths'];
+                @endphp
+                <tr wire:key="sub-{{ $subs->id }}"
+                    class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
+                    >
+                    <td class="px-6 py-4 whitespace-nowrap dark:text-black">
+                        {{ $subs->subscription->name }} - 
+                        {{ number_format($subs->subscription->amount, 0, ',', '.') }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap dark:text-black">{{ $subs->civilian->full_name }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-green-400">
+                        Rp {{ number_format($subs->debit, 0, ',', '.') }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap relative dark:text-gray-300" x-data="{ open: false }">
                         <!-- Trigger Button -->
                         <button
                             @click="open = !open"
@@ -69,7 +78,7 @@
                         >
                             Pilih Bulan
                             <span class="ml-2 bg-gray-100 rounded-full px-2 py-0.5 text-xs">
-                                {{ count($subscription->paid_months ?? []) }} terpilih
+                                {{ count($subs->paid_months ?? []) }} terpilih
                             </span>
                             <svg class="-mr-1 ml-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
@@ -89,16 +98,13 @@
                             class="origin-top-right absolute left-4 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10"
                         >
                             <div class="py-1 max-h-60 overflow-y-auto">
-                                
-                    
-                    
                                 <!-- Month List -->
-                                @foreach($subscription->availableMonths as $monthKey => $monthLabel)
+                                @foreach($availableMonths as $monthKey => $monthLabel)
                                     <label class="flex items-center px-4 py-2 text-sm cursor-pointer hover:bg-gray-50">
                                         <input 
                                             type="checkbox"
-                                            {{ in_array($monthKey, $subscription->paid_months ?? []) ? 'checked' : '' }}
-                                            wire:change="togglePayment({{ $subscription->id }}, '{{ $monthKey }}')"
+                                            {{ in_array($monthKey, $subs->paid_months ?? []) ? 'checked' : '' }}
+                                            wire:change="togglePayment({{ $subs->id }}, '{{ $monthKey }}')"
                                             class="rounded text-green-600 focus:ring-green-500 mr-3"
                                         >
                                         <span class="text-gray-700">{{ $monthLabel }}</span>
@@ -107,8 +113,8 @@
                             </div>
                         </div>
                     </td>
-                    @endforeach
                 </tr>
+            @endforeach
         </tbody>
     </table>
 

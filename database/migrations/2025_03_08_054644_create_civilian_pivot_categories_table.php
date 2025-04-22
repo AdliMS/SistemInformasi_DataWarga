@@ -13,12 +13,15 @@ return new class extends Migration
     {
         Schema::create('civilian_pivot_categories', function (Blueprint $table) {
             $table->id();
+            
             $table->unsignedBigInteger('civilian_id');
-            $table->unsignedBigInteger('category_id');
             $table->foreign('civilian_id')->nullable()
             ->nullable()->references('id')->on('civilians')->onDelete('cascade');
+
+            $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->nullable()
             ->nullable()->references('id')->on('categories')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

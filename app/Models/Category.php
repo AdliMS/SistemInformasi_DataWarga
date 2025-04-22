@@ -18,7 +18,8 @@ class Category extends Model
         'amount',
     ];
 
-    public function civilians(): BelongsToMany {
+    public function civilians(): BelongsToMany
+    {
         return $this->belongsToMany(Civilian::class, 'employee_pivot_skills', 'employee_id', 'skill_id');
     } // potential error
 
@@ -27,8 +28,12 @@ class Category extends Model
     //     return $this->hasMany(Civilian::class);
     // }
 
-    public function subscription(): BelongsTo
+    // public function subscriptions(): BelongsTo
+    // {
+    //     return $this->belongsTo(Category::class);
+    // }
+    public function subscriptions()
     {
-        return $this->belongsTo(Category::class);
+        return $this->hasMany(Subscription::class);
     }
 }

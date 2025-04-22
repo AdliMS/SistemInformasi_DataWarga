@@ -15,10 +15,15 @@
             }
         </style>
 
-        
+@filamentStyles
+{{-- @vite('resources/css/app.css')
+@vite(['resources/css/app.css', 'resources/js/app.js']) <!-- Jika menggunakan Vite -->
+<!-- atau -->
+<link href="{{ asset('css/app.css') }}" rel="stylesheet"> <!-- Jika menggunakan Mix --> --}}
 
-        @filamentStyles
-        @vite('resources/css/app.css')
+<!-- Di app.blade.php -->
+<link href="{{ asset('css/filament.css') }}" rel="stylesheet">
+<link href="{{ asset('css/app.css') }}" rel="stylesheet"> <!-- Tailwind harus diakhir -->
     </head>
 
     <body class="antialiased">

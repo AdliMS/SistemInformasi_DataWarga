@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -11,14 +13,22 @@ class CivilianPivotSubscription extends Model
     use HasFactory;
     protected $table = 'civilian_pivot_subscriptions';
     protected $fillable = [
-        'civilian_id',
         'subscription_id',
-        'paid_months'
+        'civilian_id',
+        'paid_months',
+        'debit',
     ];
 
     protected $casts = [
-        'paid_months' => 'array', // Pastikan ini ada
+        'paid_months' => 'array',
+        'debit' => 'decimal:2',
     ];
+
+    // Accessor untuk balance (update logic)
+    public function getTotalBalanceAttribute()
+    {
+        return $this->debit - $this->expenses()->where('is_income', false)->sum('amount');
+    }
 
     public function getIsPaidAttribute()
     {
@@ -41,4 +51,10 @@ class CivilianPivotSubscription extends Model
     {
         return $this->belongsTo(Subscription::class);
     }
+
+    public function expenses(): HasMany
+    {
+        return $this->hasMany(Expense::class);
+    }
+
 }

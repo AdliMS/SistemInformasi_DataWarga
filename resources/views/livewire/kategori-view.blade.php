@@ -42,9 +42,11 @@
         }
     </style>
 
+    
+
     <div class="flex h-20 p-2 gap-2 items-center">
         <!-- Selectbox untuk filter kategori -->
-    <select 
+        <select 
             wire:model.defer="selectedCategory" 
             class="js-example-basic-single">
                 <option value="" default>Semua Kategori</option>
@@ -106,7 +108,6 @@
                     <td class="px-6 py-4 whitespace-nowrap ">
                         <div class="flex flex-wrap gap-1 text-blue-500">
                             @foreach($civilian->categories as $category)
-                            
                                     {{ $category->name }}
                             @endforeach
                         </div>

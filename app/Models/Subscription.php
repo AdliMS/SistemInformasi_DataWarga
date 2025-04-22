@@ -24,4 +24,23 @@ class Subscription extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function civilian_subscriptions(): HasMany
+    {
+        return $this->hasMany(CivilianPivotSubscription::class);
+    }
+
+    // app/Models/Subscription.php
+    public function getNumericAmountAttribute()
+    {
+        $amount = preg_replace('/[^0-9]/', '', $this->amount);
+        $amount = (float) $amount;
+        
+        // Handle format dengan koma desimal (Rp 1.000,00)
+        if (strpos($this->amount, ',') !== false) {
+            return $amount / 100;
+        }
+        
+        return $amount;
+    }
 }
