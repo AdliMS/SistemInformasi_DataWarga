@@ -42,45 +42,75 @@
         }
     </style>
 
-    
+    {{-- FILTER --}}
+    <div class="p-4 mb-6 bg-white rounded-lg shadow">
+        <div class="flex flex-wrap gap-4 items-end">
 
-    <div class="flex h-20 p-2 gap-2 items-center">
-        <!-- Selectbox untuk filter kategori -->
-        <select 
-            wire:model.defer="selectedCategory" 
-            class="js-example-basic-single">
-                <option value="" default>Semua Kategori</option>
-                @foreach($categories as $category)
-                    <option value="{{ $category->id }}">{{ $category->name }}</option>
-                @endforeach
-        </select>
+            <!-- Selectbox untuk filter kategori -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Kategori</label>
+                <select 
+                    wire:model.defer="selectedCategory" 
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="" default>Semua Kategori</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
+                </select>
+            </div>
 
-        <!-- Input Pencarian Nama -->
-        <div class="relative w-48">
-            <input
-                type="text"
-                wire:model.debounce.500ms="searchName"
-                placeholder="Cari nama warga..."
-                class="w-full border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-            <button 
-                wire:click="$set('searchName', '')"
-                class="absolute right-2 top-2 text-gray-400 hover:text-gray-600"
-                style="{{ empty($searchName) ? 'display:none' : '' }}"
-            >
-                ✕
-            </button>
+            <!-- Input Pencarian Nama -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Nama Warga</label>
+                <input
+                    type="text"
+                    wire:model.debounce.500ms="searchName"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                    placeholder="Cari nama warga..."
+                >
+                {{-- <button 
+                    wire:click="$set('searchName', '')"
+                    class="absolute right-2 top-2 text-gray-400 hover:text-gray-600"
+                    style="{{ empty($searchName) ? 'display:none' : '' }}"
+                >
+                    ✕
+                </button> --}}
+            </div>
+
+            <!-- Tombol Filter -->
+            <div class="inline-block bg-blue-600 text-white rounded hover:bg-blue-700">
+                <button 
+                    wire:click="applyFilter"
+                    wire:loading.attr="disabled"
+                    wire:target="applyFilter"
+                    class="inline-block px-4 py-2"
+                >
+
+                    {{-- Normal --}}
+                    <span wire:loading.remove>Terapkan Filter</span>
+
+                    {{-- Saat loading --}}
+                    <span wire:loading class="flex items-center">
+                        <div
+                            class="flex items-center"
+                        >
+                            <svg class="animate-spin w-[0.8rem] mr-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                            </svg>
+                            Terapkan Filter
+                        </div>     
+                    </span>
+
+                    {{-- <span wire:loading wire:target="applyFilter" class="animate-spin">⏳</span> --}}
+                </button>
+            </div>
+
         </div>
-
-        <!-- Tombol Filter -->
-        <button 
-            wire:click="applyFilter"
-            wire:loading.attr="disabled"
-            class="bg-blue-500 font-medium px-2 rounded-lg flex items-center h-10"
-        >
-            <span wire:loading wire:target="applyFilter" class="animate-spin">⏳</span>
-            Terapkan Filter
-        </button>
+        
+        
 
         <!-- Tombol Reset -->
         {{-- <button 
@@ -91,41 +121,44 @@
         </button> --}}
     </div>
 
-    <!-- Tabel Data -->
-    <table class="custom-table mt-4">
-        <thead>
-            <tr>
-                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">Kategori</th>
-                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">Nama lengkap</th>
-                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">Umur</th>
-                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">Jenis kelamin</th>
-                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black uppercase tracking-wider">No. HP</th>
-            </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-            @foreach ($civilians as $civilian)
+    <!-- TABEL DATA -->
+    <div class="overflow-x-auto bg-white rounded-lg shadow">
+        <table class="min-w-full border border-gray-200">
+            <thead>
                 <tr>
-                    <td class="px-6 py-4 whitespace-nowrap ">
-                        <div class="flex flex-wrap gap-1 text-blue-500">
-                            @foreach($civilian->categories as $category)
-                                    {{ $category->name }}
-                            @endforeach
-                        </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $civilian->full_name }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ \Carbon\Carbon::parse($civilian->born_date)->age }} tahun</td>
-                    <td class="px-6 py-4 whitespace-nowrap"> 
-                        @if ($civilian->gender)
-                            Wanita
-                        @else
-                            Pria
-                        @endif
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $civilian->phone_number }}</td>
+                    <th class="px-4 py-2 border">Kategori</th>
+                    <th class="px-4 py-2 border">Nama lengkap</th>
+                    <th class="px-4 py-2 border">Umur</th>
+                    <th class="px-4 py-2 border">Jenis kelamin</th>
+                    <th class="px-4 py-2 border">No. HP</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                @foreach ($civilians as $civilian)
+                    <tr>
+                        <td class="px-4 py-2 border ">
+                            <div class="flex flex-wrap gap-1 text-blue-500">
+                                @foreach($civilian->categories as $category)
+                                        {{ $category->name }}
+                                @endforeach
+                            </div>
+                        </td>
+                        <td class="px-4 py-2 border">{{ $civilian->full_name }}</td>
+                        <td class="px-4 py-2 border">{{ \Carbon\Carbon::parse($civilian->born_date)->age }} tahun</td>
+                        <td class="px-4 py-2 border"> 
+                            @if ($civilian->gender)
+                                Wanita
+                            @else
+                                Pria
+                            @endif
+                        </td>
+                        <td class="px-4 py-2 border">{{ $civilian->phone_number }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    
 
 
     <!-- Pagination -->

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('amount');
+            $table->decimal('amount_temp', 12, 2)->default(0);
 
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->nullable()

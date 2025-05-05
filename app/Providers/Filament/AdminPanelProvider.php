@@ -33,13 +33,7 @@ class AdminPanelProvider extends PanelProvider
         // Tambahkan jQuery dan Select2
         FilamentAsset::register([
             Js::make('jquery', 'https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js'), // jQuery
-            Css::make('select2-css', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css'), // CSS Select2
-            Js::make('select2-js', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js'), // JS Select2
-            Js::make('select2-init', <<<JS
-            document.addEventListener('livewire:load', function () {
-                $('.select2').select2();
-            });
-        JS),
+            
         ]);
 
         return $panel

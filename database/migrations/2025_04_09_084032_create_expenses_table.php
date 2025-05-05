@@ -16,8 +16,6 @@ return new class extends Migration
             $table->id();
             $table->string('expense_name');
             $table->decimal('amount', 12, 2)->default(0);
-            // $table->text('description')->nullable();
-            $table->date('expense_date');
             $table->boolean('is_income')->default(false)->after('amount');
 
             $table->unsignedBigInteger('subscription_id');

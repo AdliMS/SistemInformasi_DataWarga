@@ -72,4 +72,16 @@ class Civilian extends Model
     public function liability(){
         return $this->belongsTo(Liability::class);
     }
+
+    public function activities(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Activity::class, 
+            'civilian_pivot_activities',
+            'civilian_id',
+            'activity_id')
+            ->using(CivilianPivotActivity::class)
+            ->withPivot('progress')
+            ->withTimestamps();
+    }
 }

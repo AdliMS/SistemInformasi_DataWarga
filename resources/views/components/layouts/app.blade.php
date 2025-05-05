@@ -13,17 +13,32 @@
             [x-cloak] {
                 display: none !important;
             }
+
+            select {
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                /* background-image: none !important; */
+                background-repeat: no-repeat;
+                background-position: right 0.5rem center;
+            }
+
+            /* Optional: jika masih ada ::after atau ::before dari plugin */
+            select::before,
+            select::after {
+                content: none !important;
+                display: none !important;
+            }
         </style>
 
-@filamentStyles
-{{-- @vite('resources/css/app.css')
-@vite(['resources/css/app.css', 'resources/js/app.js']) <!-- Jika menggunakan Vite -->
-<!-- atau -->
-<link href="{{ asset('css/app.css') }}" rel="stylesheet"> <!-- Jika menggunakan Mix --> --}}
+    @filamentStyles
+    {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> <!-- Jika menggunakan Mix --> --}}
 
-<!-- Di app.blade.php -->
-<link href="{{ asset('css/filament.css') }}" rel="stylesheet">
-<link href="{{ asset('css/app.css') }}" rel="stylesheet"> <!-- Tailwind harus diakhir -->
+    <!-- Di app.blade.php -->
+    {{-- <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script> --}}
+    <link href="{{ asset('css/filament.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet"> <!-- Tailwind harus diakhir -->
+
     </head>
 
     <body class="antialiased">
@@ -31,7 +46,5 @@
 
         @livewire('notifications')
 
-        @filamentScripts
-        @vite('resources/js/app.js')
     </body>
 </html>

@@ -43,7 +43,7 @@ class DataWargaResource extends Resource
             ->schema([
 
                 Select::make('category_id')
-                    // ->required()
+                    ->required()
                     ->label('Kategori')
                     ->columnSpan(2)
                     ->multiple()

@@ -1,182 +1,265 @@
 <div>
-    {{-- To attain knowledge, add things every day; To attain wisdom, subtract things every day. --}}
-    <style>
-        /* Style untuk tabel */
-        .custom-table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #ffffff;
-            border: 1px solid #e2e8f0;
-        }
 
-        .custom-table th,
-        .custom-table td {
-            padding: 12px 16px;
-            text-align: left;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .custom-table th {
-            background-color: #f7fafc;
-            font-weight: 600;
-            color: #4a5568;
-            text-transform: uppercase;
-            font-size: 0.875rem;
-        }
-
-        .custom-table tbody tr:hover {
-            background-color: #f0f4f8;
-        }
-
-        /* style untuk pagination */
-        .pagination-info {
-            font-size: 0.875rem;
-            color: #4a5568;
-        }
-
-        .pagination-select {
-            padding: 6px 12px;
-            border: 1px solid #e2e8f0;
-            border-radius: 4px;
-            font-size: 0.875rem;
-        }
-    </style>
-
-<!-- Notifikasi Error - Letakkan di bagian paling atas komponen -->
-<div x-data="{ showError: false, errorMessage: '' }"
-x-on:notify.window="showError = true; errorMessage = $event.detail.message; setTimeout(() => showError = false, 5000)"
-x-show="showError"
-x-transition
-class="fixed inset-x-0 top-4 flex justify-center z-50">
-<div class="bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center">
-   <span x-text="errorMessage" class="font-medium mx-4"></span>
-   <button @click="showError = false" class="ml-4 text-white hover:text-gray-200">
-       ✕
-   </button>
-</div>
-</div>
-    
-
-<div>
-
-
-
-
-        <!-- Filter -->
-        <div class="flex gap-4">
-            <select wire:model="selectedSubscription" class="border rounded px-4 py-2">
-                @foreach($subscriptions as $sub)
-                    <option value="{{ $sub->id }}">
-                        {{ $sub->name }}
-                    </option>
-                @endforeach
-            </select>
-            <button 
-                wire:click="applyFilter" 
-                wire:loading.attr="disabled"
-                class="bg-blue-500 px-4 py-2 rounded"
-                >
-                <span wire:loading wire:target="applyFilter" class="animate-spin mr-2">⏳</span>
-                Terapkan Filter
+    <!-- Notifikasi Error -->
+    <div x-data="{ showError: false, errorMessage: '' }"
+        x-on:notify.window="showError = true; errorMessage = $event.detail.message; setTimeout(() => showError = false, 5000)"
+        x-show="showError"
+        x-transition
+        class="fixed inset-x-0 top-4 flex justify-center z-50">
+        <div class="bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center">
+            <span x-text="errorMessage" class="font-medium mx-4"></span>
+            <button @click="showError = false" class="ml-4 text-white hover:text-gray-200">
+                ✕
             </button>
         </div>
+    </div>
 
-        <!-- Form Tambah Transaksi -->
-        <div x-data="{ showForm: false }" class="mb-6 relative">
-            <!-- Tombol Trigger -->
-            <button 
-                @click="showForm = !showForm" 
-                class="bg-blue-500 hover:bg-blue-600 text-black px-4 py-2 rounded flex items-center"
-            >
-                <span>+ Tambah Transaksi</span>
-                <svg 
-                    class="w-4 h-4 ml-2 transition-transform duration-200" 
-                    :class="{ 'rotate-180': showForm }" 
-                    fill="none" 
-                    viewBox="0 0 24 24" 
-                    stroke="currentColor"
-                >
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-            </button>
+    {{-- FILTER dan BUTTON --}}
+    <div class="p-4 mb-6 rounded-lg shadow">
+        <div class="flex flex-wrap gap-4">
 
-            <!-- Dropdown Form -->
-            <div 
-                x-cloak
-                x-show="showForm"
-                x-transition:enter="transition ease-out duration-200"
-                x-transition:enter-start="opacity-0 translate-y-1"
-                x-transition:enter-end="opacity-100 translate-y-0"
-                x-transition:leave="transition ease-in duration-150"
-                x-transition:leave-start="opacity-100 translate-y-0"
-                x-transition:leave-end="opacity-0 translate-y-1"
-                class="absolute z-10 mt-2 w-full md:w-96 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700"
-            >
-                <div class="p-4">
-                    <!-- Input Fields -->
-                    <div class="space-y-4">
-                        <!-- Input Jumlah -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Jumlah (Rp)</label>
-                            <input 
-                                type="number" 
-                                wire:model="transactionAmount"
-                                class="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                                placeholder="0"
-                            >
-                            @error('transactionAmount') 
-                                <span class="text-red-500 text-xs">{{ $message }}</span> 
-                            @enderror
-                        </div>
-
-                        <!-- Input Keterangan -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Keterangan</label>
-                            <input 
-                                type="text" 
-                                wire:model="transactionDescription"
-                                class="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                                placeholder="Contoh: Iuran bulanan"
-                            >
-                            @error('transactionDescription') 
-                                <span class="text-red-500 text-xs">{{ $message }}</span> 
-                            @enderror
-                        </div>
-                    </div>
-
-                    <!-- Action Buttons -->
-                    <div class="mt-4 flex justify-end space-x-2">
-                        <button 
-                            @click="showForm = false" 
-                            type="button" 
-                            class="px-3 py-1 text-sm border border-gray-300 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600"
+            {{-- BAGIAN FILTER --}}
+            <div class="flex flex-wrap gap-4 items-end">
+                <!-- Selectbox untuk filter iuran -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Nama Iuran</label>
+                    <select wire:model="selectedSubscription" 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                         >
-                            Batal
-                        </button>
-                        <button 
-                            wire:click="saveTransaction"
-                            wire:loading.attr="disabled"
-                            class="px-4 py-2 bg-green-500 hover:bg-green-600 text-black rounded-md flex items-center"
+                        @foreach($subscriptions as $sub)
+                            <option value="{{ $sub->id }}">
+                                {{ $sub->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+    
+                {{-- Tombol Filter --}}
+                <div class="inline-block bg-gray-500 text-white rounded hover:bg-gray-600">
+                    <button 
+                        wire:click="applyFilter" 
+                        wire:loading.attr="disabled"
+                        wire:target="applyFilter"
+                        class="inline-block px-4 py-2"
                         >
-                            <span wire:loading wire:target="saveTransaction" class="animate-spin mr-2">↻</span>
-                            Simpan
-                        </button>
+                        {{-- Normal --}}
+                        <span wire:loading.remove>Terapkan Filter</span>
 
-                        <!-- Notifikasi Error -->
-                        <div x-data="{ showError: false, message: '' }"
-                        x-on:notify.window="showError = true; message = $event.detail.message; setTimeout(() => showError = false, 5000)"
-                        x-show="showError"
-                        class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded">
-                        <span x-text="message"></span>
-                        </div>
-                    </div>
+                        {{-- Saat loading --}}
+                        <span wire:loading class="flex items-center">
+                            <div
+                                class="flex items-center"
+                            >
+                                <svg class="animate-spin w-[0.8rem] mr-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                </svg>
+                                Terapkan Filter
+                            </div>     
+                        </span>
+                    </button>
+                </div>
+            </div>
 
+            <div class="flex flex-wrap items-end">
+                <!-- Tombol Trigger -->
+                <div class="inline-block h-8 border relative bottom-1 border-x-slate-500 bg-blue-600 text-white rounded hover:bg-blue-700">
                     
                 </div>
             </div>
+
+            {{-- BAGIAN BUTTON KEUANGAN --}}
+            <div class="flex flex-wrap gap-4 items-end">
+
+                <!-- Form Tambah Transaksi -->
+                <div 
+                    x-data="{ showForm: false }" 
+                    @click.outside="showForm = false" 
+                    class="relative"
+                    >
+
+                    <!-- Tombol Trigger -->
+                    <div class="inline-block bg-blue-600 text-white rounded hover:bg-blue-700">
+                        <button 
+                            @click="showForm = !showForm" 
+                            class="inline-block px-4 py-2"
+                        >
+                            <span>+ Tambah Transaksi</span>
+                        </button>
+                    </div>
+                
+                    <!-- Dropdown Form -->
+                    <div 
+                        x-cloak
+                        x-show="showForm"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 translate-y-1"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 translate-y-0"
+                        x-transition:leave-end="opacity-0 translate-y-1"
+                        class="absolute z-10 mt-2 w-90 md:w-96 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700"
+                    >
+                        <div class="p-4">
+
+                            <div class="space-y-4">
+                                <!-- Input Jumlah -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Jumlah (Rp)</label>
+                                    <input 
+                                        type="number" 
+                                        wire:model="transactionAmount"
+                                        class="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                        placeholder="0"
+                                    >
+                                    @error('transactionAmount') 
+                                        <span class="text-red-500 text-xs">{{ $message }}</span> 
+                                    @enderror
+                                </div>
+
+                                <!-- Input Keterangan -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Keterangan</label>
+                                    <input 
+                                        type="text" 
+                                        wire:model="transactionDescription"
+                                        class="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                        placeholder="Contoh: Iuran bulanan"
+                                    >
+                                    @error('transactionDescription') 
+                                        <span class="text-red-500 text-xs">{{ $message }}</span> 
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="mt-4 flex items-center justify-end gap-2">
+                                
+                                <div class="inline-block bg-red-500 text-white text-sm rounded-md hover:bg-red-600">
+                                    <button 
+                                        @click="showForm = false" 
+                                        class="inline-block px-4 py-2"
+                                    >
+                                        Batal
+                                    </button>
+                                </div>
+                                
+                                <div class="inline-block bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600">
+                                    <button 
+                                        wire:click="saveTransaction"
+                                        wire:loading.attr="disabled"
+                                        class="inline-block px-4 py-2"
+                                    >
+                                        <span wire:loading wire:target="saveTransaction" class="animate-spin mr-2">↻</span>
+                                        Simpan
+                                    </button>
+                                </div>
+                            
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+
+                @if((! $hasInitialBalance || $hasInitialBalance == 0))
+                    {{-- Form Tambah Saldo Awal --}}
+                    <div 
+                        x-data="{ open: false }" 
+                        @click.outside="open = false" 
+                        class="relative"
+                        >
+
+                        {{-- Tombol Trigger --}}
+                        <div class="inline-block bg-green-500 text-white rounded hover:bg-green-600">
+                            <button 
+                                @click="open = !open"
+                                class="inline-block px-4 py-2"
+                                >
+                            + Tambah Saldo Awal
+                            </button>
+                        </div>
+                        
+                        {{-- Dropdown Form --}}
+                        <div 
+                            x-cloak 
+                            x-show="open" 
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 translate-y-1"
+                            x-transition:enter-end="opacity-100 translate-y-0"
+                            x-transition:leave="transition ease-in duration-150"
+                            x-transition:leave-start="opacity-100 translate-y-0"
+                            x-transition:leave-end="opacity-0 translate-y-1"
+                            @click.outside="showForm = false"
+                            class="absolute mt-2 bg-white border rounded shadow p-4 w-64"
+                            >
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Jumlah (Rp)</label>
+                            <input 
+                                type="number" 
+                                wire:model="initialBalance"
+                                class="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                placeholder="0"
+                                >
+
+                            @error('initialBalance')
+                                <span class="text-blue-500 text-xs">{{ $message }}</span>
+                            @enderror
+
+                            <div class="flex justify-end mt-2 space-x-2">
+
+                                <div class="inline-block bg-red-500 text-white rounded hover:bg-red-600">
+                                    <button 
+                                        @click="open = false"
+                                        class="inline-block px-4 py-2"
+                                        >
+                                        Batal
+                                    </button>
+                                </div>
+
+                                <div class="inline-block bg-blue-500 text-white rounded hover:bg-blue-600">
+                                    <button 
+                                        wire:click="saveInitialBalance"
+                                        class="inline-block px-4 py-2"
+                                        >
+                                        Simpan
+                                    </button>
+                                </div>
+
+                                
+                            </div>
+                        </div>
+
+                    </div>
+                @else
+
+             
+
+                    {{-- Tombol Trigger --}}
+                    <div class="inline-block bg-green-500 opacity-40 text-white rounded cursor-progress">
+                        <button 
+                            disabled
+                            class="inline-block px-4 py-2 cursor-not-allowed"
+                            >
+                        + Tambah Saldo Awal
+                        </button>
+                    </div>
+                        
+                
+
+                  
+
+
+                    
+                @endif
+            </div>
+            
+
         </div>
-    
-        <!-- Tabel Transaksi -->
+    </div>
+
+
+    <!-- TABEL DATA -->
+    <div class="overflow-x-auto bg-white rounded-lg shadow">
         <table class="min-w-full border">
             <thead>
                 <tr class="bg-gray-100">
@@ -224,12 +307,12 @@ class="fixed inset-x-0 top-4 flex justify-center z-50">
             </tbody>
         </table>
     </div>
-</div>
+    
 
+</div>
+        
 @assets
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-{{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
 @endassets
 
 {{-- works --}}
