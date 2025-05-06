@@ -72,7 +72,7 @@
             </div>
      
             <!-- Tombol Filter -->
-            <div class="inline-block  bg-blue-600 text-white rounded hover:bg-blue-700">
+            <div class="inline-block  bg-slate-500 text-white rounded hover:bg-slate-600">
                 <button 
                     wire:click="applyFilter"
                     wire:loading.attr="disabled"

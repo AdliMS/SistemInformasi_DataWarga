@@ -85,7 +85,12 @@ class KeuanganView extends Component
 
                 $description = $expense->expense_name;
 
-                $balance += $expense->is_income ? $expense->amount : -$expense->amount;
+                if ($expense->is_income && strtolower($expense->expense_name) === 'saldo awal') {
+                    // Jangan ubah balance, karena sudah dihitung dari initial_balance
+                } else {
+                    $balance += $expense->is_income ? $expense->amount : -$expense->amount;
+                }
+                
 
                 return [
                     'created_at' => $expense->created_at, // Sertakan created_at

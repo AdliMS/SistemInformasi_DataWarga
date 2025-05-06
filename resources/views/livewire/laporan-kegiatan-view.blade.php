@@ -40,7 +40,7 @@
             </div>
 
             {{-- Tombol Filter --}}
-            <div class="inline-block  bg-blue-600 text-white rounded hover:bg-blue-700">
+            <div class="inline-block  bg-slate-500 text-white rounded hover:bg-slate-600">
                 <button
                     wire:click="applyFilter"
                     wire:loading.attr="disabled"
@@ -69,54 +69,8 @@
             </div>
         </div>
     </div>
-
-    {{-- TABEL DATA --}}
-    {{-- <div class="overflow-x-auto bg-white rounded-lg shadow">
-        <table class="min-w-full border border-gray-200">
-            <thead class="bg-gray-100">
-                <th class="px-4 py-2 border">No.</th>
-                <th class="px-4 py-2 border">Nama Warga</th>
-                <th class="px-4 py-2 border">Kategori Warga</th>
-                <th class="px-4 py-2 border">Nama Kegiatan</th>
-                <th class="px-4 py-2 border">Input Kegiatan</th>
-                <th class="px-4 py-2 border">Target</th>
-                <th class="px-4 py-2 border">Keterangan</th>
-            </thead>
-            <tbody>
-                @foreach($data as $idx => $row)
-                    @php $count = count($row['activities']); @endphp
-
-                    @foreach($row['activities'] as $i => $activity)
-                    <tr>
-                        @if($i === 0)
-                            <td rowspan="{{ $count }}" class="px-4 py-2 border text-center">{{ $idx+1 }}.</td>
-                            <td rowspan="{{ $count }}" class="px-4 py-2 border">{{ $row['full_name'] }}</td>
-                            <td rowspan="{{ $count }}" class="px-4 py-2 border">{{ $row['category'] }}</td>
-                        @endif
-
-            
-
-                        <td class="px-4 py-2 border">{{ $activity['activity_name'] }}</td>
-                        <td class="px-4 py-2 border text-center">{{ $activity['progress'] }}</td>
-                        <td class="px-4 py-2 border text-center">{{ $activity['target'] }}</td>
-
-                        @php
-                            $keterangan = $activity['keterangan'];
-                        @endphp
-
-                        <td class="px-4 py-2 border text-center">
-                            <span class="px-2 py-1 rounded-full text-xs font-semibold {{ $keterangan['color'] }}">
-                                {{ $keterangan['label'] }}
-                            </span>
-                        </td>
-
-                    </tr>
-                    @endforeach
-                @endforeach
-            </tbody>
-        </table>
-    </div> --}}
     
+    {{-- TABEL DATA --}}
     <div class="overflow-x-auto bg-white rounded-lg shadow">
         <table class="min-w-full border border-gray-200">
           <thead class="bg-gray-100">
