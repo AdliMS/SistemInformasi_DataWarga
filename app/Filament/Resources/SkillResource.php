@@ -27,14 +27,16 @@ class SkillResource extends Resource
     protected static ?string $navigationGroup = 'Kategori';
     protected static ?string $label = 'Kategori Warga';
     protected static ?int $navigationSort = 1;
+    protected static ?string $slug = 'kategori-warga';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('name')
-                    // ->required()
-                    ->label('Nama kategori'), 
+                    ->required()
+                    ->autofocus()
+                    ->label('Nama kategori')
 
             ]);
     }

@@ -15,12 +15,23 @@ class LaporanKegiatanView extends Component
     // properti untuk menampung filter
     public $selectedCategory = '';
     public $searchName       = '';
-    public $perPage = 3;
+    public $perPage = 10;
 
     // dipanggil saat tombol "Terapkan Filter" diklik
     public function applyFilter()
     {
         // kosong saja—Livewire akan otomatis re-render dengan nilai deferred model
+    }
+
+    public function exportToExcel() {
+        session([
+            'laporan_kegiatan_filter' => [
+                'selectedCategory' => $this->selectedCategory,
+                'searchName'       => $this->searchName,
+            ],
+        ]);
+
+        $this->dispatch('triggerExcelDownload');
     }
 
     private function getKeterangan($progress, $target)

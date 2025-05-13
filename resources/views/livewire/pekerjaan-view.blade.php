@@ -57,18 +57,20 @@
                         <option value="{{ $job->id }}">{{ $job->job_place }}</option>
                     @endforeach
                 </select>
-            </div>
-             
+            </div>   
      
             <!-- Input Nama Warga -->
-            <div>
+            <div class="bg-green">
                 <label class="block text-sm font-medium text-gray-700">Nama Warga</label>
-                <input
+                <div>
+                    <input
                     type="text"
                     wire:model.debounce.500ms="searchName"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-red-500"
                     placeholder="Cari nama warga..."
-                >
+                    >
+                </div>
+                
             </div>
      
             <!-- Tombol Filter -->
@@ -98,14 +100,20 @@
                     </span>
                 </button>
             </div>
-     
-             <!-- Tombol Reset -->
-             {{-- <button 
-                 wire:click="resetFilters"
-                 class="text-gray-600 hover:text-gray-800 ml-2 text-sm border border-gray-300 px-3 py-2 rounded-lg"
-             >
-                 Reset
-             </button> --}}
+
+            {{-- Tombol Ekspor .xlxs --}}
+            <div class="inline-block bg-green-500 text-white rounded hover:bg-green-600">
+                <button wire:click="exportToExcel" class="bg-green-600 px-4 py-2 rounded text-white">
+                    Export ke Excel
+                </button>
+
+                <script>
+                    window.addEventListener('triggerExcelDownload', function () {
+                        window.location.href = "{{ route('laporan-pekerjaan.export') }}";
+                    });
+                </script>
+            </div>
+
         </div>
     </div>
 
@@ -153,7 +161,6 @@
             </tbody>
         </table>
     </div>
-    
 
     {{ $civilians->links() }}
 </div>

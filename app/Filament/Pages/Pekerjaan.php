@@ -12,4 +12,5 @@ class Pekerjaan extends Page
     protected static ?string $navigationGroup = 'Laporan';
     protected static ?string $label = 'Laporan Pekerjaan';
     protected static string $view = 'filament.pages.pekerjaan';
+    protected static ?string $slug = 'laporan-pekerjaan';
 }

@@ -12,9 +12,9 @@ class KegiatanView extends Component
     use WithPagination;
     protected $paginationTheme = 'tailwind';
 
-    public $perPage = 3;
     public $selectedCategory = '';
     public $searchName       = '';
+    public $perPage = 10;
 
     public function updatedSelectedCategory() { $this->resetPage(); }
     public function updatedSearchName()       { $this->resetPage(); }

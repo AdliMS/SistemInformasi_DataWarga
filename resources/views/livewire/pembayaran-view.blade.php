@@ -42,7 +42,7 @@
         }
     </style>
 
-    <div class="overflow-x-auto bg-white rounded-lg shadow relative">
+    <div style="overflow: visible;" class="overflow-x-auto bg-white rounded-lg shadow">
         <!-- Tabel untuk Data civilians -->
         <table class="min-w-full border border-gray-200">
             <thead class="bg-gray-100">
@@ -51,7 +51,7 @@
                 <th class="px-4 py-2 border">Total Dibayar</th>
                 <th class="px-4 py-2 border">Aksi</th>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-500">
+            <tbody class="bg-white  divide-y divide-gray-200 dark:bg-gray-500">
                 @foreach($subscriptions as $subscription)
                     @php
                         $subs = $subscription['model'];
@@ -68,7 +68,7 @@
                         <td class="px-4 py-2 border text-left" text-green-400">
                             Rp {{ number_format($subs->debit, 0, ',', '.') }}
                         </td>
-                        <td class="px-6 py-4 m-auto whitespace-nowrap dark:text-gray-300" x-data="{ open: false }">
+                        <td class="px-6 py-4 m-auto relative whitespace-nowrap dark:text-gray-300" x-data="{ open: false }">
                             <!-- Trigger Button -->
                             <button
                                 @click="open = !open"
@@ -94,7 +94,7 @@
                                 x-transition:leave="transition ease-in duration-75"
                                 x-transition:leave-start="transform opacity-100 scale-100"
                                 x-transition:leave-end="transform opacity-0 scale-95"
-                                class="origin-top-right relative left-4 mt-2 w-56 z-50 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+                                class="origin-top-right absolute left-4 mt-2 w-56 z-50 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
                             >
                                 <div class="py-1 max-h-60 overflow-y-auto relative">
                                     <!-- Month List -->

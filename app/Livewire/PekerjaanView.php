@@ -25,6 +25,18 @@ class PekerjaanView extends Component
         $this->resetPage();
     }
 
+    public function exportToExcel()
+    {
+        session([
+            'laporan_pekerjaan_filter' => [
+                'selectedJob' => $this->selectedJob,
+                'searchName' => $this->searchName,
+            ],
+        ]);
+        $this->dispatch('triggerExcelDownload');
+    }
+
+
     public function resetFilters()
     {
         $this->selectedJob = '';

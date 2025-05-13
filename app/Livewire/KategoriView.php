@@ -30,6 +30,18 @@ class KategoriView extends Component
         $this->resetPage();
     }
 
+    public function exportToExcel()
+    {
+        session([
+            'laporan_kategori_filter' => [
+                'category_id' => $this->appliedCategory,
+                'search' => $this->appliedSearch,
+            ]
+        ]);
+
+        $this->dispatch('triggerExcelDownload');
+    }
+
     public function render()
     {
         $civilians = Civilian::query()

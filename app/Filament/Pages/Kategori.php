@@ -11,5 +11,5 @@ class Kategori extends Page
     protected static ?string $navigationLabel = 'Kategori';
     protected static ?string $navigationGroup = 'Laporan';
     protected static ?string $label = 'Laporan Kategori Warga';
-
+    protected static ?string $slug = 'laporan-kategori-warga';
 }

@@ -36,6 +36,7 @@ class DataWargaResource extends Resource
     protected static ?string $navigationLabel = 'Data Warga';
     protected static ?string $label = 'Data Warga';
     protected static ?int $navigationSort = 1;
+    protected static ?string $slug = 'data-warga';
 
     public static function form(Form $form): Form
     {

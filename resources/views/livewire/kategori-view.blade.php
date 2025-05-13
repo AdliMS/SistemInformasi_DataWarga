@@ -108,6 +108,19 @@
                 </button>
             </div>
 
+            <div class="inline-block bg-green-500 text-white rounded hover:bg-green-600">
+                <button wire:click="exportToExcel" class="bg-green-600 px-4 py-2 rounded text-white">
+                    Export ke Excel
+                </button>
+                
+                <script>
+                    window.addEventListener('triggerExcelDownload', function () {
+                        window.location.href = "{{ route('laporan-kategori.export') }}";
+                    });
+                </script>
+                
+            </div>
+
         </div>
         
         
@@ -136,13 +149,10 @@
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach ($civilians as $civilian)
                     <tr>
-                        <td class="px-4 py-2 border ">
-                            <div class="flex flex-wrap gap-1 text-blue-500">
-                                @foreach($civilian->categories as $category)
-                                        {{ $category->name }}
-                                @endforeach
-                            </div>
+                        <td class="px-4 py-2 border text-blue-500">
+                            {{ $civilian->categories->pluck('name')->implode(', ') }}
                         </td>
+                        
                         <td class="px-4 py-2 border">{{ $civilian->full_name }}</td>
                         <td class="px-4 py-2 border">{{ \Carbon\Carbon::parse($civilian->born_date)->age }} tahun</td>
                         <td class="px-4 py-2 border"> 
@@ -166,6 +176,14 @@
         {{ $civilians->links() }}
     </div>
 </div>
+
+@push('scripts')
+<script>
+    Livewire.on('triggerExcelDownload', () => {
+        window.location.href = "{{ route('laporan-kategori.export') }}";
+    });
+</script>
+@endpush
 
 @assets
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>

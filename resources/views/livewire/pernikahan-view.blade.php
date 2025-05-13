@@ -76,7 +76,7 @@
                 </button> --}}
             </div>
         
-            <!-- tombol trigger filter -->
+            <!-- Tombol  Filter -->
             <div class="inline-block  bg-slate-500 text-white rounded hover:bg-slate-600">
                 <button 
                     wire:click="applyFilter"
@@ -104,6 +104,18 @@
                 </button>
             </div>
             
+            {{-- Tombol Ekspor .xlxs --}}
+            <div class="inline-block bg-green-500 text-white rounded hover:bg-green-600">
+                <button wire:click="exportToExcel" class="bg-green-600 px-4 py-2 rounded text-white">
+                    Export ke Excel
+                </button>
+
+                <script>
+                    window.addEventListener('triggerExcelDownload', function () {
+                        window.location.href = "{{ route('laporan-pernikahan.export') }}";
+                    });
+                </script>
+            </div>
         </div>
     </div>
 

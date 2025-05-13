@@ -26,6 +26,7 @@ class DataPekerjaanResource extends Resource
     protected static ?string $navigationLabel = 'Data Pekerjaan';
     protected static ?string $label = 'Data Pekerjaan';
     protected static ?int $navigationSort = 2;
+    protected static ?string $slug = 'data-pekerjaan';
 
     public static function form(Form $form): Form
     {

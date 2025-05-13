@@ -1,16 +1,9 @@
-<div class="flex flex-col items-center h-screen p-12 gap-8 bg-slate-200">
+<div class="flex flex-col items-center justify-center h-screen p-12 gap-8 bg-slate-200">
     
 
     {{-- BAGIAN INPUT --}}
     <div class="flex flex-col bg-[#fafafa] gap-8 w-1/2 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-16 border">
-
         <h1 class="text-4xl pb-4 font-medium border-b border-gray-300">Formulir Kegiatan Warga</h1> 
-        {{-- Tombol Kembali --}}
-        <a href="{{ route('filament.admin.pages.kegiatan') }}"
-            class="ml-auto text-red-500 hover:underline font-medium text-sm">
-            ← Kembali
-        </a>
-
             <div>
                 <!-- Form Input dalam Dropdown -->
         
@@ -102,6 +95,7 @@
                         
                     @endif
             </div>
+
         {{-- Flash Message --}}
     @if (session()->has('success'))
         <div class="w-full bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">

@@ -29,6 +29,15 @@
     </div>
 
     @if($subscriptionId)
+
+        <div class="inline-block my-2 bg-green-500 text-white rounded hover:bg-green-600">
+            <form method="GET" action="{{ route('laporan-iuran.export', ['subscriptionId' => $subscriptionId]) }}">
+                <button type="submit" 
+                    class="px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded hover:bg-green-700 transition">
+                    Ekspor ke Excel
+                </button>
+            </form>
+        </div>
         <div class="overflow-x-auto bg-white rounded-lg shadow">
             <table class="min-w-full border border-gray-200">
                 <thead class="bg-gray-50">

@@ -14,5 +14,5 @@ class LaporanIuran extends Page
     protected static ?string $navigationGroup = 'Iuran';
     protected static ?string $label = 'Laporan Iuran';
     protected static ?int $navigationSort = 3;
-   
+   protected static ?string $slug = 'laporan-iuran';
 }

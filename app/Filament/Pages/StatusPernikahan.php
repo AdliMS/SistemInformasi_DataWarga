@@ -12,5 +12,6 @@ class StatusPernikahan extends Page
     protected static ?string $navigationLabel = 'Status Pernikahan';
     protected static ?string $navigationGroup = 'Laporan';
     protected static ?string $label = 'Laporan Status Pernikahan';
+    protected static ?string $slug = 'laporan-status-pernikahan';
 
 }

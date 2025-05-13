@@ -18,12 +18,14 @@ return new class extends Migration
             $table->decimal('amount', 12, 2)->default(0);
             $table->boolean('is_income')->default(false)->after('amount');
 
-            $table->unsignedBigInteger('subscription_id');
-            $table->foreign('subscription_id')->nullable()
-            ->nullable()->references('id')->on('subscriptions')->onDelete('cascade');
+            $table->unsignedBigInteger('subscription_id')->nullable();
+            $table->foreign('subscription_id')->references('id')->on('subscriptions')->onDelete('cascade');
 
             $table->unsignedBigInteger('civilian_pivot_subscription_id')->nullable()->after('subscription_id');
-            $table->foreign('civilian_pivot_subscription_id')->references('id')->on('civilian_pivot_subscriptions');
+            $table->foreign('civilian_pivot_subscription_id')
+            ->references('id')->on('civilian_pivot_subscriptions')
+            ->onDelete('cascade');
+
 
             $table->timestamps();
         });

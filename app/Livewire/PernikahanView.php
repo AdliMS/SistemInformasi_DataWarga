@@ -24,6 +24,16 @@ class PernikahanView extends Component
         // Tidak perlu emit karena kita menggunakan property langsung
     }
 
+    public function exportToExcel()
+    {
+        session([
+            'statusPernikahan' => $this->statusPernikahan,
+            'searchName' => $this->searchName,
+        ]);
+
+        $this->dispatch('triggerExcelDownload');
+    }
+
     public function render()
     {
         $query = Civilian::query();

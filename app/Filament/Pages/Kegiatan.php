@@ -12,6 +12,7 @@ class Kegiatan extends Page
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Kegiatan';
     protected static ?string $navigationLabel = 'Kegiatan Warga';
+    // protected static ?string $slug = 'laporan-kegiatan';
 
     protected static string $view = 'filament.pages.kegiatan';
 

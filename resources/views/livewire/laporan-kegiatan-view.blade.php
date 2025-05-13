@@ -67,82 +67,93 @@
 
                 </button>
             </div>
+
+            {{-- Tombol Ekspor .xlsx --}}
+            <div class="inline-block bg-green-500 text-white rounded hover:bg-green-600">
+                <button wire:click="exportToExcel" class="bg-green-600 px-4 py-2 rounded text-white">
+                    Export ke Excel
+                </button>
+
+                <script>
+                    window.addEventListener('triggerExcelDownload', function () {
+                        window.location.href = "{{ route('laporan-kegiatan.export') }}";
+                    });
+                </script>
+            </div>
         </div>
     </div>
     
     {{-- TABEL DATA --}}
     <div class="overflow-x-auto bg-white rounded-lg shadow">
-        <table class="min-w-full border border-gray-200">
-          <thead class="bg-gray-100">
-            <tr>
-              <th class="px-4 py-2 border">No.</th>
-              <th class="px-4 py-2 border">Nama Warga</th>
-              <th class="px-4 py-2 border">Kategori Warga</th>
-              <th class="px-4 py-2 border">Nama Kegiatan</th>
-              <th class="px-4 py-2 border">Input Kegiatan</th>
-              <th class="px-4 py-2 border">Target</th>
-              <th class="px-4 py-2 border">Keterangan</th>
-            </tr>
-          </thead>
-          <tbody>
-            @foreach($data as $civIndex => $civ)
+      <table class="min-w-full border border-gray-200">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="px-4 py-2 border">No.</th>
+            <th class="px-4 py-2 border">Nama Warga</th>
+            <th class="px-4 py-2 border">Kategori Warga</th>
+            <th class="px-4 py-2 border">Nama Kegiatan</th>
+            <th class="px-4 py-2 border">Input Kegiatan</th>
+            <th class="px-4 py-2 border">Target</th>
+            <th class="px-4 py-2 border">Keterangan</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach($data as $civIndex => $civ)
+            @php
+              // Hitung total baris untuk warga ini
+              $rowspanW     = collect($civ['categories'])->sum(fn($c)=> count($c['activities']));
+              $displayWarga = true;
+            @endphp
+    
+            @foreach($civ['categories'] as $cat)
               @php
-                // Hitung total baris untuk warga ini
-                $rowspanW     = collect($civ['categories'])->sum(fn($c)=> count($c['activities']));
-                $displayWarga = true;
+                $acts            = $cat['activities'];
+                $displayKategori = true;
               @endphp
-      
-              @foreach($civ['categories'] as $cat)
-                @php
-                  $acts            = $cat['activities'];
-                  $displayKategori = true;
-                @endphp
-      
-                @foreach($acts as $act)
-                  <tr class="hover:bg-gray-50">
-                    {{-- No. & Nama Warga --}}
-                    @if($displayWarga)
-                      <td rowspan="{{ $rowspanW }}" class="px-4 py-2 border text-center">
-                        {{ $civIndex + 1 }}.
-                      </td>
-                      <td rowspan="{{ $rowspanW }}" class="px-4 py-2 border">
-                        {{ $civ['full_name'] }}
-                      </td>
-                      @php $displayWarga = false; @endphp
-                    @endif
-      
-                    {{-- Kategori --}}
-                    @if($displayKategori)
-                      <td rowspan="{{ count($acts) }}" class="px-4 py-2 border">
-                        {{ $cat['name'] }}
-                      </td>
-                      @php $displayKategori = false; @endphp
-                    @endif
-      
-                    {{-- Data Kegiatan --}}
-                    <td class="px-4 py-2 border">{{ $act['name'] }}</td>
-                    <td class="px-4 py-2 border text-center">{{ $act['progress'] }}</td>
-                    <td class="px-4 py-2 border text-center">{{ $act['target'] }}</td>
-                    <td class="px-4 py-2 border text-center">
-                      <span class="px-2 py-1 rounded-full text-xs font-semibold {{ $act['keterangan']['color'] }}">
-                        {{ $act['keterangan']['label'] }}
-                      </span>
+    
+              @foreach($acts as $act)
+                <tr class="hover:bg-gray-50">
+                  {{-- No. & Nama Warga --}}
+                  @if($displayWarga)
+                    <td rowspan="{{ $rowspanW }}" class="px-4 py-2 border text-center">
+                      {{ $civIndex + 1 }}.
                     </td>
-                  </tr>
-                @endforeach
+                    <td rowspan="{{ $rowspanW }}" class="px-4 py-2 border">
+                      {{ $civ['full_name'] }}
+                    </td>
+                    @php $displayWarga = false; @endphp
+                  @endif
+    
+                  {{-- Kategori --}}
+                  @if($displayKategori)
+                    <td rowspan="{{ count($acts) }}" class="px-4 py-2 border">
+                      {{ $cat['name'] }}
+                    </td>
+                    @php $displayKategori = false; @endphp
+                  @endif
+    
+                  {{-- Data Kegiatan --}}
+                  <td class="px-4 py-2 border">{{ $act['name'] }}</td>
+                  <td class="px-4 py-2 border text-center">{{ $act['progress'] }}</td>
+                  <td class="px-4 py-2 border text-center">{{ $act['target'] }}</td>
+                  <td class="px-4 py-2 border text-center">
+                    <span class="px-2 py-1 rounded-full text-xs font-semibold {{ $act['keterangan']['color'] }}">
+                      {{ $act['keterangan']['label'] }}
+                    </span>
+                  </td>
+                </tr>
               @endforeach
             @endforeach
-          </tbody>
-        </table>
-      </div>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
       
-      
-    {{-- pagination links --}}
+      {{-- PAGINASI --}}
     <div class="mt-4 px-4">
         {{ $data->links() }}
     </div>
 
-    
 </div>
 
 @assets
