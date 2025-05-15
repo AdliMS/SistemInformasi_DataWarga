@@ -157,6 +157,10 @@
         </table>
     </div>
 
+    <div class="mt-4">
+        {{ $civilians->links() }}
+    </div>
+
 </div>
 
 @assets

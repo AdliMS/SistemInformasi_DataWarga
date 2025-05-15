@@ -15,12 +15,16 @@ class PernikahanView extends Component
     public $searchName = '';
     public $appliedStatus = '';
     public $appliedName = '';
+    public $perPage = 10;
+    protected $queryString = ['appliedStatus', 'appliedName', 'page'];
+
 
     // Terapkan filter saat tombol diklik
     public function applyFilter()
     {
         $this->appliedStatus = $this->statusPernikahan;
         $this->appliedName = $this->searchName;
+        $this->resetPage();
         // Tidak perlu emit karena kita menggunakan property langsung
     }
 
@@ -50,7 +54,7 @@ class PernikahanView extends Component
             $query->where('full_name', 'like', '%' . $this->appliedName . '%');
         }
 
-        $civilians = $query->get();
+        $civilians = $query->paginate($this->perPage);
 
         return view('livewire.pernikahan-view', [
             'civilians' => $civilians,
