@@ -10,7 +10,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class LaporanIuranExport implements FromArray, WithHeadings
 {
-    protected $subscriptionId;
+    protected int $subscriptionId;
     protected $finalBalance;
 
     public function __construct($subscriptionId)
