@@ -119,15 +119,13 @@ class DataWargaResource extends Resource
                                 "Belum menempuh pendidikan" => "Belum menempuh pendidikan",
                                 "TK" => "TK",
                                 "SD sederajat" => "SD sederajat",
-                                "SMP sederajat" => "SMA sederajat",
+                                "SMP sederajat" => "SMP sederajat",
                                 "SMA sederajat" => "SMA sederajat",
                                 "D3" => "D3",
                                 "D4/S1" => "D4/S1",
                                 "S2" => "S2",
                                 "S3" => "S3",
-
                             ])
-
                     ])->addActionAlignment(Alignment::End),
 
                 Repeater::make('civilian_pivot_jobs')

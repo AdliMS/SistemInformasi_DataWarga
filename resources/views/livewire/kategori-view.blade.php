@@ -44,85 +44,148 @@
 
     {{-- FILTER --}}
     <div class="p-4 mb-6 bg-white rounded-lg shadow">
-        <div class="flex flex-wrap gap-4 items-end">
-
-            <!-- Selectbox untuk filter kategori -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Kategori</label>
-                <select 
-                    wire:model.defer="selectedCategory" 
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-                        <option value="" default>Semua Kategori</option>
-                        @foreach($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
-                        @endforeach
-                </select>
-            </div>
-
-            <!-- Input Pencarian Nama -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Nama Warga</label>
-                <input
-                    type="text"
-                    wire:model.debounce.500ms="searchName"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                    placeholder="Cari nama warga..."
-                >
-                {{-- <button 
-                    wire:click="$set('searchName', '')"
-                    class="absolute right-2 top-2 text-gray-400 hover:text-gray-600"
-                    style="{{ empty($searchName) ? 'display:none' : '' }}"
-                >
-                    ✕
-                </button> --}}
-            </div>
-
-            <!-- Tombol Filter -->
-            <div class="inline-block bg-slate-500 text-white rounded hover:bg-slate-600">
-                <button 
-                    wire:click="applyFilter"
-                    wire:loading.attr="disabled"
-                    wire:target="applyFilter"
-                    class="inline-block px-4 py-2"
-                >
-
-                    {{-- Normal --}}
-                    <span wire:loading.remove>Terapkan Filter</span>
-
-                    {{-- Saat loading --}}
-                    <span wire:loading class="flex items-center">
-                        <div
-                            class="flex items-center"
-                        >
-                            <svg class="animate-spin w-[0.8rem] mr-2" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor"
-                                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-                            </svg>
-                            Terapkan Filter
-                        </div>     
-                    </span>
-
-                    {{-- <span wire:loading wire:target="applyFilter" class="animate-spin">⏳</span> --}}
-                </button>
-            </div>
-
-            <div class="inline-block bg-green-500 text-white rounded hover:bg-green-600">
-                <button wire:click="exportToExcel" class="bg-green-600 px-4 py-2 rounded text-white">
-                    Export ke Excel
-                </button>
-                
-                <script>
-                    window.addEventListener('triggerExcelDownload', function () {
-                        window.location.href = "{{ route('laporan-kategori.export') }}";
-                    });
-                </script>
-                
-            </div>
-
-        </div>
         
+        <div class="flex flex-row justify-between">
+
+            <div class="flex flex-wrap gap-4 items-end">
+
+                <!-- Selectbox untuk filter kategori -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Kategori</label>
+                    <select 
+                        wire:model.defer="selectedCategory" 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            <option value="" default>Semua Kategori</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                    </select>
+                </div>
+
+                <!-- Input Pencarian Nama -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Nama Warga</label>
+                    <input
+                        type="text"
+                        wire:model.debounce.500ms="searchName"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                        placeholder="Cari nama warga..."
+                    >
+                    {{-- <button 
+                        wire:click="$set('searchName', '')"
+                        class="absolute right-2 top-2 text-gray-400 hover:text-gray-600"
+                        style="{{ empty($searchName) ? 'display:none' : '' }}"
+                    >
+                        ✕
+                    </button> --}}
+                </div>
+
+                <!-- Tombol Filter -->
+                <div class="inline-block bg-slate-500 text-white rounded hover:bg-slate-600">
+                    <button 
+                        wire:click="applyFilter"
+                        wire:loading.attr="disabled"
+                        wire:target="applyFilter"
+                        class="inline-block px-4 py-2"
+                    >
+
+                        {{-- Normal --}}
+                        <span wire:loading.remove>Terapkan Filter</span>
+
+                        {{-- Saat loading --}}
+                        <span wire:loading class="flex items-center">
+                            <div
+                                class="flex items-center"
+                            >
+                                <svg class="animate-spin w-[0.8rem] mr-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                </svg>
+                                Terapkan Filter
+                            </div>     
+                        </span>
+
+                        {{-- <span wire:loading wire:target="applyFilter" class="animate-spin">⏳</span> --}}
+                    </button>
+                </div>
+
+                <div class="inline-block bg-green-500 text-white rounded hover:bg-green-600">
+                    <button wire:click="exportToExcel" class="bg-green-600 px-4 py-2 rounded text-white">
+                        Export ke Excel
+                    </button>
+                    
+                    <script>
+                        window.addEventListener('triggerExcelDownload', function () {
+                            window.location.href = "{{ route('laporan-kategori.export') }}";
+                        });
+                    </script>
+                    
+                </div>
+            </div>
+
+            
+
+            {{-- <div class="flex h-20 pt-2 gap-2 justify-end">
+                <div class="mt-8">
+                    <div class="mb-6 w-fit px-4 py-2  bg-blue-500 text-white text-left rounded hover:bg-blue-600">
+                        <a 
+                        href="{{ route('form-kegiatan') }}"
+                        class="flex items-center"
+                        >
+                            <svg class="flex w-8 h-4 mr-2 justify-center" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            Tambah Data (RKM SUT)
+                        </a>
+                    </div>           
+                </div>
+            </div> --}}
+
+            <div class="flex h-20 pt-2 gap-2 justify-end">
+                <div class="mt-8">
+                    @if (!$appliedCategory)
+                        <div class="mb-6 w-fit px-4 py-2  bg-blue-200 text-white text-left rounded">
+                            <button class="flex items-center" disabled>
+                                + Tambah Data
+                            </button>
+                        </div>
+                        @else
+                        <div class="mb-6 w-fit px-4 py-2  bg-blue-500 hover:bg-blue-600 text-white text-left rounded">
+                            <a 
+                            href="{{ route('form-warga', ['category_id' => $appliedCategory]) }}"
+                            class="flex items-center"
+                            >
+                                <svg class="flex w-8 h-4 mr-2 justify-center" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                </svg>
+                                Tambah Data
+                                @if($appliedCategory)
+                                    @php
+                                        $selectedCategoryName = $categories->firstWhere('id', $appliedCategory)?->name;
+                                    @endphp
+                                    @if($selectedCategoryName)
+                                    
+                                            ({{ $selectedCategoryName }})
+                                    
+                                    @endif
+                                @endif
+                        </div>
+                            
+                        @endif
+                        </a>
+                    
+                </div>
+                
+            </div>
+        </div>
         
 
         <!-- Tombol Reset -->

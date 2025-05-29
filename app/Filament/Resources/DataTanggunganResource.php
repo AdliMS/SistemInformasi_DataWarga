@@ -58,6 +58,9 @@ class DataTanggunganResource extends Resource
                     ->required()
                     ->label('Pendidikan terakhir')
                     ->options([
+                        "Belum menempuh pendidikan" => "Belum menempuh pendidikan",
+                        "SD sederajat" => "SD sederajat",
+                        "SMP sederajat" => "SMP sederajat",
                         "SMA sederajat" => "SMA sederajat",
                         "D3" => "D3",
                         "D4/S1" => "D4/S1",

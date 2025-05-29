@@ -7,12 +7,12 @@ use App\Http\Controllers\LaporanKategoriExportController;
 use App\Http\Controllers\LaporanKegiatanExportController;
 use App\Http\Controllers\LaporanPekerjaanExportController;
 use App\Http\Controllers\LaporanPernikahanExportController;
+use App\Livewire\FormWarga;
 
-
-Route::get('/isi-kegiatan', FormKegiatan::class)->name('form-kegiatan');
+Route::get('/isi-kegiatan', FormKegiatan::class)->name('form-kegiatan');                
+Route::get('/isi-datawarga/{category_id?}', FormWarga::class)->name('form-warga');    
 Route::get('/laporan-kategori/export', [LaporanKategoriExportController::class, 'export'])->name('laporan-kategori.export');
-Route::get('/laporan-iuran/export/{subscriptionId}', [LaporanIuranExportController::class, 'export'])
-    ->name('laporan-iuran.export');
+Route::get('/laporan-iuran/export/{subscriptionId}', [LaporanIuranExportController::class, 'export'])->name('laporan-iuran.export');
 Route::get('/laporan-pekerjaan/export', [LaporanPekerjaanExportController::class, 'export'])->name('laporan-pekerjaan.export');
 Route::get('/laporan-kegiatan/export', [LaporanKegiatanExportController::class, 'export'])->name('laporan-kegiatan.export');
 Route::get('/laporan-pernikahan/export', [LaporanPernikahanExportController::class, 'export'])->name('laporan-pernikahan.export');

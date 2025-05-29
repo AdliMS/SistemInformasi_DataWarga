@@ -27,7 +27,7 @@ class IuranResource extends Resource
     protected static ?string $navigationLabel = 'Iuran';
     protected static ?string $label = 'Kategori Iuran';
     protected static ?int $navigationSort = 2;
-    protected static ?string $slug = 'data-iuran';
+    protected static ?string $slug = 'kategori-iuran';
 
     public static function form(Form $form): Form
     {
