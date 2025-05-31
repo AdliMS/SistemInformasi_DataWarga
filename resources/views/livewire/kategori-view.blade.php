@@ -125,27 +125,6 @@
                 </div>
             </div>
 
-            
-
-            {{-- <div class="flex h-20 pt-2 gap-2 justify-end">
-                <div class="mt-8">
-                    <div class="mb-6 w-fit px-4 py-2  bg-blue-500 text-white text-left rounded hover:bg-blue-600">
-                        <a 
-                        href="{{ route('form-kegiatan') }}"
-                        class="flex items-center"
-                        >
-                            <svg class="flex w-8 h-4 mr-2 justify-center" 
-                            fill="none" 
-                            stroke="currentColor" 
-                            viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                            </svg>
-                            Tambah Data (RKM SUT)
-                        </a>
-                    </div>           
-                </div>
-            </div> --}}
-
             <div class="flex h-20 pt-2 gap-2 justify-end">
                 <div class="mt-8">
                     @if (!$appliedCategory)
@@ -155,10 +134,10 @@
                             </button>
                         </div>
                         @else
-                        <div class="mb-6 w-fit px-4 py-2  bg-blue-500 hover:bg-blue-600 text-white text-left rounded">
+                        <div class="mb-6 w-fit  bg-blue-500 hover:bg-blue-600 text-white text-left rounded">
                             <a 
                             href="{{ route('form-warga', ['category_id' => $appliedCategory]) }}"
-                            class="flex items-center"
+                            class=" w-fit px-4 py-2 rounded  flex items-center"
                             >
                                 <svg class="flex w-8 h-4 mr-2 justify-center" 
                                 fill="none" 
@@ -177,10 +156,10 @@
                                     
                                     @endif
                                 @endif
+                            </a>
                         </div>
                             
                         @endif
-                        </a>
                     
                 </div>
                 

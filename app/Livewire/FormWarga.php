@@ -23,9 +23,13 @@ class FormWarga extends Component
 
     public function mount($category_id = null)
     {
+        if ($category_id !== null) {
+            $this->categoryId = $category_id;
+        }
+
         $this->jobOptions = CivilianJob::pluck('job_place', 'id')->toArray();
-        $this->categoryId = $category_id;
     }
+
 
     public $pekerjaan = [
         ['civilian_job_id' => '', 'accepted_date' => '', 'retirement_date' => '']
@@ -169,11 +173,16 @@ class FormWarga extends Component
             }
         });
 
+        $catId = $this->categoryId; // simpan dulu
+        
+        $this->reset();
+        
+        $this->categoryId = $catId; // restore ulang
+        $this->jobOptions = CivilianJob::pluck('job_place', 'id')->toArray();
         $this->dispatch('show-success-alert', [
             'message' => 'Data warga berhasil ditambahkan!'
         ]);
-        $this->reset();
-        $this->mount(); // untuk reload ulang selectbox
+
     }
 
 

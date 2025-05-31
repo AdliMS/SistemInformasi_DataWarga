@@ -10,7 +10,7 @@ use App\Http\Controllers\LaporanPernikahanExportController;
 use App\Livewire\FormWarga;
 
 Route::get('/isi-kegiatan', FormKegiatan::class)->name('form-kegiatan');                
-Route::get('/isi-datawarga/{category_id?}', FormWarga::class)->name('form-warga');    
+Route::get('/isi-datawarga/{category_id}', FormWarga::class)->name('form-warga');    
 Route::get('/laporan-kategori/export', [LaporanKategoriExportController::class, 'export'])->name('laporan-kategori.export');
 Route::get('/laporan-iuran/export/{subscriptionId}', [LaporanIuranExportController::class, 'export'])->name('laporan-iuran.export');
 Route::get('/laporan-pekerjaan/export', [LaporanPekerjaanExportController::class, 'export'])->name('laporan-pekerjaan.export');
