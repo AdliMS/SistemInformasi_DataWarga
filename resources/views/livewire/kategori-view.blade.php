@@ -71,13 +71,6 @@
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                         placeholder="Cari nama warga..."
                     >
-                    {{-- <button 
-                        wire:click="$set('searchName', '')"
-                        class="absolute right-2 top-2 text-gray-400 hover:text-gray-600"
-                        style="{{ empty($searchName) ? 'display:none' : '' }}"
-                    >
-                        ✕
-                    </button> --}}
                 </div>
 
                 <!-- Tombol Filter -->
@@ -133,7 +126,7 @@
                                 + Tambah Data
                             </button>
                         </div>
-                        @else
+                    @else
                         <div class="mb-6 w-fit  bg-blue-500 hover:bg-blue-600 text-white text-left rounded">
                             <a 
                             href="{{ route('form-warga', ['category_id' => $appliedCategory]) }}"
@@ -157,23 +150,14 @@
                                     @endif
                                 @endif
                             </a>
-                        </div>
-                            
-                        @endif
+                        </div>    
+                    @endif
                     
                 </div>
                 
             </div>
         </div>
         
-
-        <!-- Tombol Reset -->
-        {{-- <button 
-            wire:click="resetFilters"
-            class="text-gray-600 hover:text-gray-800 text-sm"
-        >
-            Reset
-        </button> --}}
     </div>
 
     <!-- TABEL DATA -->

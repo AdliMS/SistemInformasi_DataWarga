@@ -58,7 +58,7 @@ class FormWarga extends Component
     public function removeTanggungan($index)
     {
         unset($this->tanggungan[$index]);
-        $this->tanggungan = array_values($this->tanggungan); // reset indeks agar rapi
+        $this->tanggungan = array_values($this->tanggungan);
     }
 
     public function updated($propertyName)
@@ -68,7 +68,7 @@ class FormWarga extends Component
             'gender' => 'required|string',
             'born_place' => 'required|string',
             'born_date' => 'required|date',
-            'nik' => 'required|string|min:16|max:16',
+            'nik' => 'required|string|size:16',
             'married_status' => 'required|string',
             'home_address' => 'required|string',
             'phone_number' => 'required|string|max:20',
@@ -82,6 +82,8 @@ class FormWarga extends Component
         ]);
     }
 
+    
+
     public function submit()
     {
         $this->validate([
@@ -89,7 +91,7 @@ class FormWarga extends Component
             'gender' => 'required|string',
             'born_place' => 'required|string',
             'born_date' => 'required|date',
-            'nik' => 'required|string|min:16|max:16',
+            'nik' => 'required|string|size:16',
             'married_status' => 'required|string',
             'home_address' => 'required|string',
             'phone_number' => 'required|string|max:20',
@@ -107,22 +109,6 @@ class FormWarga extends Component
         foreach ($this->tanggungan as $index => $item) {
             $this->tanggungan[$index]['gender'] = $item['gender'] === 'Wanita' ? 1 : 0;
         }
-        
-
-        // dd([
-        //     'full_name' => $this->full_name,
-        //     'gender' => $this->gender,
-        //     'born_place' => $this->born_place,
-        //     'born_date' => $this->born_date,
-        //     'nik' => $this->nik,
-        //     'married_status' => $this->married_status,
-        //     'home_address' => $this->home_address,
-        //     'phone_number' => $this->phone_number,
-        //     'category_id' => $this->categoryId,
-        //     'tanggungan' => $this->tanggungan,
-        //     'pekerjaan' => $this->pekerjaan,
-        // ]);
-
 
         DB::transaction(function () {
             $civilian = Civilian::create([
@@ -183,6 +169,14 @@ class FormWarga extends Component
             'message' => 'Data warga berhasil ditambahkan!'
         ]);
 
+    }
+
+    public function messages()
+    {
+        return [
+            'nik.size' => 'NIK harus terdiri dari tepat 16 digit.',
+            'nik.digits' => 'NIK harus terdiri dari tepat 16 digit angka.',
+        ];
     }
 
 
