@@ -176,6 +176,7 @@ class FormWarga extends Component
         return [
             'nik.size' => 'NIK harus terdiri dari tepat 16 digit.',
             'nik.digits' => 'NIK harus terdiri dari tepat 16 digit angka.',
+            'phone_number.max' => 'Jumlah digit terlalu panjang'
         ];
     }
 
